@@ -1,0 +1,9 @@
+Package: com.efrederickson.almpoum
+Name: Almpoum
+Depends: mobilesubstrate
+Version: 0.0.1
+Architecture: iphoneos-arm
+Description: An awesome MobileSubstrate tweak!
+Maintainer: Elijah Frederickson
+Author: Elijah Frederickson
+Section: Tweaks
