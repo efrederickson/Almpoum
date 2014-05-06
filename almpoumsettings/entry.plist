@@ -5,6 +5,6 @@
 	detail = AlmpoumSettingsListController;
 	icon = AlmpoumSettings.png;
 	isController = 1;
-	label = AlmpoumSettings;
+	label = Almpoum;
     };
 }

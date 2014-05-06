@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>items</key>
+	<array>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+		</dict>
+		<dict>
+			<key>PostNotification</key>
+			<string>com.efrederickson.almpoum/reloadSettings</string>
+			<key>cell</key>
+			<string>PSLinkListCell</string>
+			<key>default</key>
+			<string>1</string>
+			<key>defaults</key>
+			<string>com.efrederickson.almpoum.settings</string>
+			<key>detail</key>
+			<string>PSListItemsController</string>
+			<key>key</key>
+			<string>saveMode</string>
+			<key>label</key>
+			<string>Save Action</string>
+			<key>validTitles</key>
+			<array>
+				<string>Always prompt</string>
+				<string>Save to photos library</string>
+				<string>Save to pasteboard</string>
+				<string>Both</string>
+			</array>
+			<key>validValues</key>
+			<array>
+				<string>1</string>
+				<string>2</string>
+				<string>3</string>
+				<string>4</string>
+			</array>
+		</dict>
+
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.efrederickson.almpoum.settings</string>
+			<key>key</key>
+			<string>copyToClipboard</string>
+			<key>label</key>
+			<string>Always save copy to pasteboard</string>
+			<key>PostNotification</key>
+			<string>com.efrederickson.almpoum/reloadSettings</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.efrederickson.almpoum.settings</string>
+			<key>key</key>
+			<string>copyToPictures</string>
+			<key>label</key>
+			<string>Always save copy to photos</string>
+			<key>PostNotification</key>
+			<string>com.efrederickson.almpoum/reloadSettings</string>
+		</dict>
+
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.efrederickson.almpoum.settings</string>
+			<key>key</key>
+			<string>saveToCustomAlbum</string>
+			<key>label</key>
+			<string>Save to custom album</string>
+			<key>PostNotification</key>
+			<string>com.efrederickson.almpoum/reloadSettings</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSEditTextCell</string>
+			<key>default</key>
+			<string>Screenshots</string>
+			<key>defaults</key>
+			<string>com.efrederickson.almpoum.settings</string>
+			<key>key</key>
+			<string>albumName</string>
+			<key>label</key>
+			<string>Album Name:</string>
+			<key>PostNotification</key>
+			<string>com.efrederickson.almpoum/reloadSettings</string>
+			<key>icon</key>
+			<string>albumName.png</string>
+			<key>placeholder</key>
+			<string>Desired album name</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.efrederickson.almpoum.settings</string>
+			<key>key</key>
+			<string>showCameraFlash</string>
+			<key>label</key>
+			<string>Show Screen Flash</string>
+			<key>PostNotification</key>
+			<string>com.efrederickson.almpoum/reloadSettings</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.efrederickson.almpoum.settings</string>
+			<key>key</key>
+			<string>darkenCameraFlash</string>
+			<key>label</key>
+			<string>Darken Flash</string>
+			<key>PostNotification</key>
+			<string>com.efrederickson.almpoum/reloadSettings</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.efrederickson.almpoum.settings</string>
+			<key>key</key>
+			<string>playShutterSound</string>
+			<key>label</key>
+			<string>Play Screenshot Sound</string>
+			<key>PostNotification</key>
+			<string>com.efrederickson.almpoum/reloadSettings</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.efrederickson.almpoum.settings</string>
+			<key>key</key>
+			<string>notifyApps</string>
+			<key>label</key>
+			<string>Notify apps of screenshot</string>
+			<key>PostNotification</key>
+			<string>com.efrederickson.almpoum/reloadSettings</string>
+		</dict>
+	</array>
+	<key>title</key>
+	<string>Almpoum</string>
+</dict>
+</plist>

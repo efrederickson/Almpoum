@@ -6,7 +6,7 @@ TARGET = iphone:clang:7.1:7.1
 include theos/makefiles/common.mk
 
 TWEAK_NAME = Almpoum
-Almpoum_FILES = ALAssetsLibrary+CustomPhotoAlbum.m Tweak.xm
+Almpoum_FILES = ALAssetsLibrary+CustomPhotoAlbum.m Tweak.xm 
 Almpoum_FRAMEWORKS = AssetsLibrary MobileCoreServices UIKit CoreGraphics AudioToolbox Foundation
 
 include $(THEOS_MAKE_PATH)/tweak.mk

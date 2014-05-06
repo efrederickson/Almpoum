@@ -5,6 +5,7 @@
 #import <SpringBoard/SBScreenFlash.h>
 #import <SpringBoard/SBApplication.h>
 #import <dlfcn.h>
+#import <MobileCoreServices/MobileCoreServices.h> // For the UTI types constants
 
 @interface SBScreenShotter
 +(id)sharedInstance;
@@ -27,6 +28,16 @@ extern "C" UIImage *_UICreateScreenUIImageWithRotation(BOOL rotate);
 
 BOOL enabled = YES;
 NSString *albumName = @"Screenshots";
+BOOL saveToCustomAlbum = YES;
+BOOL showCameraFlash = YES;
+BOOL darkenCameraFlash = NO;
+BOOL playShutterSound = YES;
+BOOL notifyApps = NO;
+BOOL copyToClipboard = NO;
+BOOL copyToPictures = NO;
+int saveMode = 1;
+
+static UIImage *screenshot;
 
 static void reloadSettings(CFNotificationCenterRef center,
                                     void *observer,
@@ -46,10 +57,88 @@ static void reloadSettings(CFNotificationCenterRef center,
         albumName = [prefs objectForKey:@"albumName"];
     else
         albumName = @"Screenshots";
+
+    if ([prefs objectForKey:@"saveToCustomAlbum"] != nil)
+        saveToCustomAlbum = [[prefs objectForKey:@"saveToCustomAlbum"] boolValue];
+    else
+        saveToCustomAlbum = YES;
+        
+    if ([prefs objectForKey:@"showCameraFlash"] != nil)
+        showCameraFlash = [[prefs objectForKey:@"showCameraFlash"] boolValue];
+    else
+        showCameraFlash = YES;
+        
+    if ([prefs objectForKey:@"darkenCameraFlash"] != nil)
+        darkenCameraFlash = [[prefs objectForKey:@"darkenCameraFlash"] boolValue];
+    else
+        darkenCameraFlash = NO;
+        
+    if ([prefs objectForKey:@"playShutterSound"] != nil)
+        playShutterSound = [[prefs objectForKey:@"playShutterSound"] boolValue];
+    else
+        playShutterSound = YES;
+        
+    if ([prefs objectForKey:@"notifyApps"] != nil)
+        notifyApps = [[prefs objectForKey:@"notifyApps"] boolValue];
+    else
+        notifyApps = NO;
+        
+    if ([prefs objectForKey:@"copyToClipboard"] != nil)
+        copyToClipboard = [[prefs objectForKey:@"copyToClipboard"] boolValue];
+    else
+        copyToClipboard = NO;
+
+    if ([prefs objectForKey:@"copyToPictures"] != nil)
+        copyToPictures = [[prefs objectForKey:@"copyToPictures"] boolValue];
+    else
+        copyToPictures = NO;
+        
+    if ([prefs objectForKey:@"saveMode"] != nil)
+        saveMode = [[prefs objectForKey:@"saveMode"] intValue];
+    else
+        saveMode = 1;
 }
 
+static void saveScreenshot(UIImage *screenshot)
+{
+    if (saveToCustomAlbum)
+    {
+        ALAssetsLibrary *al = [[ALAssetsLibrary alloc] init];
+
+        void (^completion)(NSURL *, NSError *) = ^(NSURL *assetURL, NSError *error) {
+            NSLog(@"Almpoum: saved to album: %@", [assetURL absoluteString]);
+        };
+        
+        void (^failure)(NSError *) = ^(NSError *error) {
+            if (error == nil) return;
+            NSLog(@"Almpoum: failed to save to album: %@", [error description]);
+        };
+
+        [al saveImage:screenshot
+            toAlbum:albumName
+            completion:completion
+            failure:failure];
+    }
+    else
+    {
+        UIImageWriteToSavedPhotosAlbum(screenshot, [%c(SBScreenShotter) sharedInstance], @selector(finishedWritingScreenshot:didFinishSavingWithError:context:), NULL);
+    }
+}
+
+%group ALL
+%hook SBScreenFlash
+-(void) flashColor:(UIColor*)color
+{
+    if (darkenCameraFlash)
+        %orig([UIColor colorWithRed:199.0/255.0 green:67.0/255.0 blue:252.0/255.0 alpha:1.0]);
+    else
+        %orig;
+}
+%end
+%end // group ALL
+
 %group MAIN
-%hook SBScreenShotter
+%hook SBScreenShotter // <UIAlertViewDelegate>
 -(void)saveScreenshot:(BOOL)arg1 
 {
     if (!enabled)
@@ -59,84 +148,77 @@ static void reloadSettings(CFNotificationCenterRef center,
         return;
     }
 
-    UIImage *screenshot = _UICreateScreenUIImageWithRotation(TRUE);
+    screenshot = _UICreateScreenUIImageWithRotation(TRUE);
 	if (screenshot) {
-		ALAssetsLibrary *al = [[ALAssetsLibrary alloc] init];
-        
-        void (^completion)(NSURL *, NSError *) = ^(NSURL *assetURL, NSError *error) {
-            NSLog(@"Almpoum: saved to album: %@", [assetURL absoluteString]);
-        };
-        
-        void (^failure)(NSError *) = ^(NSError *error) {
-            if (error == nil) return;
-            NSLog(@"Almpoum: failed to save to album: %@", [error description]);
-        };
-
-        [al saveImage:screenshot
-            toAlbum:albumName
-            completion:completion
-            failure:failure];
+        if (saveMode == 1) // Prompt
+        { 
+           UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Almpoum" message:@"Save screenshot?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+            [alert addButtonWithTitle:@"Save to photo library"];
+            [alert addButtonWithTitle:@"Save to pasteboard"];
+            [alert addButtonWithTitle:@"Both"];
+            [alert show];
+        }
+        if (saveMode == 2 || copyToPictures) // Photo library
+        { 
+            saveScreenshot(screenshot);
+        }
+        if (saveMode == 3 || copyToClipboard) // pasteboard
+        {
+            UIPasteboard *pb = [UIPasteboard generalPasteboard];
+            [pb setData:UIImagePNGRepresentation(screenshot) forPasteboardType:(__bridge NSString *)kUTTypePNG];
+        }
+        if (saveMode == 4) // Both
+        { 
+            UIPasteboard *pb = [UIPasteboard generalPasteboard];
+            [pb setData:UIImagePNGRepresentation(screenshot) forPasteboardType:(__bridge NSString *)kUTTypePNG];
             
-        SBApplication *frontMostApplication = [(SpringBoard *)[UIApplication sharedApplication] _accessibilityFrontMostApplication];
-        [frontMostApplication.remoteApplication didTakeScreenshot];
-        
-        [[%c(SBScreenFlash) sharedInstance] flash];
-		AudioServicesPlaySystemSound(kPhotoShutterSystemSound);
+            saveScreenshot(screenshot);
+        }
+
+        if (notifyApps)
+        {
+            SBApplication *frontMostApplication = [(SpringBoard *)[UIApplication sharedApplication] _accessibilityFrontMostApplication];
+            [frontMostApplication.remoteApplication didTakeScreenshot];
+        }
+
+        if (showCameraFlash)
+            [[%c(SBScreenFlash) sharedInstance] flash];
+        if (playShutterSound)
+            AudioServicesPlaySystemSound(kPhotoShutterSystemSound);
+
         //[[%c(SBScreenShotter) sharedInstance] finishedWritingScreenshot:nil didFinishSavingWithError:nil context:nil];
 	} else {
 		NSLog(@"Almpoum: _UICreateScreenUIImageWithRotation failed");
 	}
 }
-%end
-%end // group MAIN
 
-%group ClipShot
-%hook CSScreenShotter
-- (void)saveScreenshotToCameraRoll:(UIImage *)screenshot 
-{
-    if (!enabled)
-    {
-        NSLog(@"Almpoum: calling orig because disabled");
-        %orig;
-        return;
+%new
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 1) {
+        // Photo library
+        saveScreenshot(screenshot);
     }
-
-    if (screenshot) {
-		ALAssetsLibrary *al = [[ALAssetsLibrary alloc] init];
-        
-        void (^completion)(NSURL *, NSError *) = ^(NSURL *assetURL, NSError *error) {
-            NSLog(@"Almpoum: saved to album: %@", [assetURL absoluteString]);
-        };
-        
-        void (^failure)(NSError *) = ^(NSError *error) {
-            if (error == nil) return;
-            NSLog(@"Almpoum: failed to save to album: %@", [error description]);
-        };
-
-        [al saveImage:screenshot
-            toAlbum:albumName
-            completion:completion
-            failure:failure];
-        //[[objc_getClass("SBScreenShotter") sharedInstance] finishedWritingScreenshot:nil didFinishSavingWithError:nil context:nil];
-	} else {
+    else if (buttonIndex == 2) {
+        // pasteboard
+        UIPasteboard *pb = [UIPasteboard generalPasteboard];
+        [pb setData:UIImagePNGRepresentation(screenshot) forPasteboardType:(__bridge NSString *)kUTTypePNG];
+    }
+    else if (buttonIndex == 3) {
+        // both
+        UIPasteboard *pb = [UIPasteboard generalPasteboard];
+        [pb setData:UIImagePNGRepresentation(screenshot) forPasteboardType:(__bridge NSString *)kUTTypePNG];
+            
+        saveScreenshot(screenshot);
     }
 }
 %end
-%end // group ClipShot
+%end // group MAIN
 
 %ctor
 {
-    if ([[NSFileManager defaultManager] fileExistsAtPath:@"/Library/MobileSubstrate/DynamicLibraries/ClipShot.dylib"])
-    {
-        dlopen("/Library/MobileSubstrate/DynamicLibraries/ClipShot.dylib", RTLD_NOW | RTLD_GLOBAL);
-        %init(ClipShot);
-        NSLog(@"Almpoum: initialized ClipShot hooks");
-    }
-    else
-    {
-        %init(MAIN);
-        NSLog(@"Almpoum: initialized SpringBoard hooks");
-    }
+    %init(ALL);
+    %init(MAIN);
+    NSLog(@"Almpoum: initialized SpringBoard hooks");
 
     CFNotificationCenterRef r = CFNotificationCenterGetDarwinNotifyCenter();
     CFNotificationCenterAddObserver(r, NULL, &reloadSettings, CFSTR(SETTINGS_EVENT), NULL, 0);

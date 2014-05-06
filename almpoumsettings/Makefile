@@ -2,9 +2,9 @@ ARCHS = armv7 armv7s arm64
 include theos/makefiles/common.mk
 
 BUNDLE_NAME = AlmpoumSettings
-AlmpoumSettings_FILES = AlmpoumSettings.mm HeaderCell.m AlmpoumFooterCell.m
+AlmpoumSettings_FILES = AlmpoumSettings.mm MailSender.m 
 AlmpoumSettings_INSTALL_PATH = /Library/PreferenceBundles
-AlmpoumSettings_FRAMEWORKS = UIKit
+AlmpoumSettings_FRAMEWORKS = UIKit MessageUI
 AlmpoumSettings_PRIVATE_FRAMEWORKS = Preferences
 
 include $(THEOS_MAKE_PATH)/bundle.mk
