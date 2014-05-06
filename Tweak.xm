@@ -6,6 +6,12 @@
 #import <SpringBoard/SBApplication.h>
 #import <dlfcn.h>
 
+@interface SBScreenShotter
++(id)sharedInstance;
+-(void)saveScreenshot:(BOOL)screenshot;
+-(void)finishedWritingScreenshot:(id)screenshot didFinishSavingWithError:(id)error context:(void*)context;
+@end
+
 @interface UIRemoteApplication
 -(void)didTakeScreenshot;
 @end
@@ -37,7 +43,7 @@ static void reloadSettings(CFNotificationCenterRef center,
         enabled = YES;
  
     if ([prefs objectForKey:@"albumName"] != nil)
-        albumName = [[prefs objectForKey:@"albumName"] stringValue];
+        albumName = [prefs objectForKey:@"albumName"];
     else
         albumName = @"Screenshots";
 }
@@ -67,15 +73,16 @@ static void reloadSettings(CFNotificationCenterRef center,
         };
 
         [al saveImage:screenshot
-            toAlbum:@"Test Screenshot Album"
+            toAlbum:albumName
             completion:completion
             failure:failure];
             
         SBApplication *frontMostApplication = [(SpringBoard *)[UIApplication sharedApplication] _accessibilityFrontMostApplication];
         [frontMostApplication.remoteApplication didTakeScreenshot];
         
-        [(SBScreenFlash *)[%c(SBScreenFlash) sharedInstance] flash];
+        [[%c(SBScreenFlash) sharedInstance] flash];
 		AudioServicesPlaySystemSound(kPhotoShutterSystemSound);
+        //[[%c(SBScreenShotter) sharedInstance] finishedWritingScreenshot:nil didFinishSavingWithError:nil context:nil];
 	} else {
 		NSLog(@"Almpoum: _UICreateScreenUIImageWithRotation failed");
 	}
@@ -110,6 +117,7 @@ static void reloadSettings(CFNotificationCenterRef center,
             toAlbum:albumName
             completion:completion
             failure:failure];
+        //[[objc_getClass("SBScreenShotter") sharedInstance] finishedWritingScreenshot:nil didFinishSavingWithError:nil context:nil];
 	} else {
     }
 }
