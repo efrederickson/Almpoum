@@ -4,6 +4,7 @@
 #import <SpringBoard/SpringBoard.h>
 #import <SpringBoard/SBScreenFlash.h>
 #import <SpringBoard/SBApplication.h>
+#import <dlfcn.h>
 
 @interface UIRemoteApplication
 -(void)didTakeScreenshot;
@@ -15,7 +16,7 @@
 
 extern "C" UIImage *_UICreateScreenUIImageWithRotation(BOOL rotate);
 #define kPhotoShutterSystemSound 0x454
-#define SETTINGS_FILE @"/var/mobile/Library/Preferences/com.efrederickson.almpoum.plist"
+#define SETTINGS_FILE @"/var/mobile/Library/Preferences/com.efrederickson.almpoum.settings.plist"
 #define SETTINGS_EVENT "com.efrederickson.almpoum/reloadSettings"
 
 BOOL enabled = YES;
@@ -47,6 +48,7 @@ static void reloadSettings(CFNotificationCenterRef center,
 {
     if (!enabled)
     {
+        NSLog(@"Almpoum: calling orig because disabled");
         %orig;
         return;
     }
@@ -87,6 +89,7 @@ static void reloadSettings(CFNotificationCenterRef center,
 {
     if (!enabled)
     {
+        NSLog(@"Almpoum: calling orig because disabled");
         %orig;
         return;
     }
@@ -117,6 +120,7 @@ static void reloadSettings(CFNotificationCenterRef center,
 {
     if ([[NSFileManager defaultManager] fileExistsAtPath:@"/Library/MobileSubstrate/DynamicLibraries/ClipShot.dylib"])
     {
+        dlopen("/Library/MobileSubstrate/DynamicLibraries/ClipShot.dylib", RTLD_NOW | RTLD_GLOBAL);
         %init(ClipShot);
         NSLog(@"Almpoum: initialized ClipShot hooks");
     }
