@@ -49,7 +49,7 @@
     SLComposeViewController *composeController = [SLComposeViewController
                                                   composeViewControllerForServiceType:SLServiceTypeTwitter];
     
-    [composeController setInitialText:@"I’m loving #Almpoum from @Daementor and @DrewPlex, it’s been keeping my photo albums squeaky clean!"];
+    [composeController setInitialText:@"I’m loving #Almpoum from @Daementor and @DrewPlex, it’s been keeping my screenshot albums organized!"];
     
     [self presentViewController:composeController
                        animated:YES completion:nil];

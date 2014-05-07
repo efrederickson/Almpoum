@@ -8,7 +8,7 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>footerText</key>
-			<string>
+			<string>Decides what you’d like Almpoum to do once you take a screenshot</string>
 		</dict>
 		<dict>
 			<key>PostNotification</key>
@@ -40,7 +40,12 @@
 				<string>4</string>
 			</array>
 		</dict>
-
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>footerText</key>
+			<string>These two settings allow you to always have a function done, regardless of the circumstance</string>
+		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
@@ -69,10 +74,11 @@
 			<key>PostNotification</key>
 			<string>com.efrederickson.almpoum/reloadSettings</string>
 		</dict>
-
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
+			<key>footerText</key>
+			<string>Feeling a little groovy, perhaps creative? Easily change the name of the album where all your screenshots will be sent</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -104,11 +110,13 @@
 			<key>icon</key>
 			<string>albumName.png</string>
 			<key>placeholder</key>
-			<string>Desired album name</string>
+			<string>DESIRED NAME</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
+			<key>footerText</key>
+			<string>A few options that’ll allow you to customize the behavior when taking a screenshot</string>
 		</dict>
 		<dict>
 			<key>cell</key>
