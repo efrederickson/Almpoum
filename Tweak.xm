@@ -130,7 +130,7 @@ static void saveScreenshot(UIImage *screenshot)
 -(void) flashColor:(UIColor*)color
 {
     if (darkenCameraFlash)
-        %orig([UIColor colorWithRed:199.0/255.0 green:67.0/255.0 blue:252.0/255.0 alpha:1.0]);
+        %orig([UIColor blackColor]);
     else
         %orig;
 }

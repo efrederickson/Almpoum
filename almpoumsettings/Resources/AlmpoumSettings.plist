@@ -6,21 +6,18 @@
 	<array>
 		<dict>
 			<key>cell</key>
-			<string>PSGroupCell</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGiantIconCell</string>
-			<key>icon</key>
-			<string>almpoumLogo.png</string>
-			<key>enabled</key><false/>
+			<string>PSStaticTextCell</string>
+			<key>cellClass</key>
+			<string>CustomGiantCell</string>
+			<key>height</key>
+			<integer>100</integer>
 		</dict>
 
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>footerText</key>
-			<string>Simple setting to easily enable/disable Almpoum</string>
+			<string>Quickly enable or disable Almpoum</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -71,14 +68,14 @@
 			<string>PSGroupCell</string>
 		</dict>
 		<dict>
-			<key>action</key>
-			<string>sendEmail</string>
 			<key>cell</key>
-			<string>PSButtonCell</string>
+			<string>PSLinkCell</string>
 			<key>label</key>
 			<string>Support</string>
 			<key>icon</key>
 			<string>support.png</string>
+			<key>detail</key>
+			<string>AlmpoumSupportController</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -86,10 +83,11 @@
 		</dict>
 		<dict>
 			<key>cell</key>
-			<string>PSGiantIconCell</string>
-			<key>icon</key>
-			<string>almpoumFooter.png</string>
-			<key>enabled</key><false/>
+			<string>PSStaticTextCell</string>
+			<key>cellClass</key>
+			<string>CustomGiantFooterCell</string>
+			<key>height</key>
+			<integer>65</integer>
 		</dict>
 	</array>
 	<key>title</key>
