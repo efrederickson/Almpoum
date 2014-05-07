@@ -152,9 +152,9 @@ static void saveScreenshot(UIImage *screenshot)
 	if (screenshot) {
         if (saveMode == 1) // Prompt
         { 
-           UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Almpoum" message:@"Save screenshot?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
-            [alert addButtonWithTitle:@"Save to photo library"];
-            [alert addButtonWithTitle:@"Save to pasteboard"];
+           UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Almpoum" message:@"What would you like to happen to that Screenshot?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+            [alert addButtonWithTitle:@"Save to Photo Library"];
+            [alert addButtonWithTitle:@"Copy to the Clipboard"];
             [alert addButtonWithTitle:@"Both"];
             [alert show];
         }

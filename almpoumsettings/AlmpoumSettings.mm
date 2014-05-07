@@ -4,6 +4,13 @@
 #import <Social/SLComposeViewController.h>
 #import <Social/SLServiceTypes.h>
 
+
+@interface PSTableCell (Almpoum)
+@property (nonatomic, retain) UIView *backgroundView;
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier specifier:(PSSpecifier *)specifier;
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier;
+@end
+
 @interface PSListController (Almpoum)
 - (void)presentViewController:(UIViewController *)viewControllerToPresent animated:(BOOL)flag completion:(void (^)(void))completion;
 - (void)dismissViewControllerAnimated:(BOOL)flag completion:(void (^)(void))completion;
@@ -49,7 +56,7 @@
     SLComposeViewController *composeController = [SLComposeViewController
                                                   composeViewControllerForServiceType:SLServiceTypeTwitter];
     
-    [composeController setInitialText:@"I’m loving #Almpoum from @Daementor and @DrewPlex, it’s been keeping my screenshot albums organized!"];
+    [composeController setInitialText:@"I’m loving #Almpoum from @Daementor and @DrewPlex, it’s been keeping my screenshots nice and organized!"];
     
     [self presentViewController:composeController
                        animated:YES completion:nil];
@@ -79,7 +86,7 @@
 -(id) specifiers {
     if (_specifiers == nil)
     {
-        if (!mailViewController)
+        if (!mailViewController && [MFMailComposeViewController canSendMail])
         {
             mailViewController = [[MFMailComposeViewController alloc] init];
             mailViewController.mailComposeDelegate = self;
@@ -89,8 +96,8 @@
             [mailViewController addAttachmentData:[[NSFileManager defaultManager] contentsAtPath:@"/var/mobile/Library/Preferences/com.efrederickson.almpoum.settings.plist"] mimeType:@"text/plain" fileName:@"almpoum.settings.plist"];
         
             [self.rootController presentViewController:mailViewController animated:YES completion:nil];
+            //[mailViewController release];
         }
-        //[mailViewController release];
         //[[super navigationController] popViewControllerAnimated:YES];
         
         NSMutableArray *specifiers = [NSMutableArray array];
@@ -105,17 +112,12 @@
 }
 
 -(void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
+    [self dismissViewControllerAnimated:YES completion:NULL];
     
-    [self dismissViewControllerAnimated:YES completion:nil];
     //[self.rootController popController];
     //[[super navigationController] popViewControllerAnimated:YES];
 }
-@end
 
-@interface PSTableCell (Almpoum)
-@property (nonatomic, retain) UIView *backgroundView;
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier specifier:(PSSpecifier *)specifier;
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier;
 @end
 
 @interface CustomGiantCell : PSTableCell {
@@ -124,11 +126,6 @@
 @end
 
 @implementation CustomGiantCell
-
-//- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier specifier:(PSSpecifier *)specifier
-//- (id)initWithSpecifier:(PSSpecifier *)specifier
-//{
-//    self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"headerCell" specifier:specifier];
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
 	if((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])){
         UIImage *bkIm = [[UIImage alloc] initWithContentsOfFile:@"/Library/PreferenceBundles/AlmpoumSettings.bundle/logo@2x.png"];
@@ -146,11 +143,6 @@
 @end
 
 @implementation CustomGiantFooterCell
-
-//- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier specifier:(PSSpecifier *)specifier
-//- (id)initWithSpecifier:(PSSpecifier *)specifier
-//{
-//    self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"headerCell" specifier:specifier];
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
 	if((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])){
         UIImage *bkIm = [[UIImage alloc] initWithContentsOfFile:@"/Library/PreferenceBundles/AlmpoumSettings.bundle/footer@2x.png"];

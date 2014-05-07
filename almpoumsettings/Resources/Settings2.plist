@@ -8,7 +8,7 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>footerText</key>
-			<string>Decides what you’d like Almpoum to do once you take a screenshot</string>
+			<string>Decides what you’d like Almpoum to do once you take a screenshot.</string>
 		</dict>
 		<dict>
 			<key>PostNotification</key>
@@ -24,12 +24,12 @@
 			<key>key</key>
 			<string>saveMode</string>
 			<key>label</key>
-			<string>Save Action</string>
+			<string>Screenshot Action</string>
 			<key>validTitles</key>
 			<array>
-				<string>Always prompt</string>
-				<string>Save to photos library</string>
-				<string>Save to pasteboard</string>
+				<string>Prompt Me</string>
+				<string>Save to Photo Library</string>
+				<string>Copy to the Clipboard</string>
 				<string>Both</string>
 			</array>
 			<key>validValues</key>
@@ -44,7 +44,7 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>footerText</key>
-			<string>These two settings allow you to always have a function done, regardless of the circumstance</string>
+			<string>These two settings allow you to always have a function done, regardless of the circumstance.</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -56,7 +56,7 @@
 			<key>key</key>
 			<string>copyToClipboard</string>
 			<key>label</key>
-			<string>Always save copy to pasteboard</string>
+			<string>Always Copy to Clipboard</string>
 			<key>PostNotification</key>
 			<string>com.efrederickson.almpoum/reloadSettings</string>
 		</dict>
@@ -70,7 +70,7 @@
 			<key>key</key>
 			<string>copyToPictures</string>
 			<key>label</key>
-			<string>Always save copy to photos</string>
+			<string>Always Save to Photos</string>
 			<key>PostNotification</key>
 			<string>com.efrederickson.almpoum/reloadSettings</string>
 		</dict>
@@ -78,7 +78,7 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>footerText</key>
-			<string>Feeling a little groovy, perhaps creative? Easily change the name of the album where all your screenshots will be sent</string>
+			<string>Feeling a little groovy, perhaps creative? Easily change the name of the album where all your screenshots will be saved.</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -90,7 +90,7 @@
 			<key>key</key>
 			<string>saveToCustomAlbum</string>
 			<key>label</key>
-			<string>Save to custom album</string>
+			<string>Save to Custom Album</string>
 			<key>PostNotification</key>
 			<string>com.efrederickson.almpoum/reloadSettings</string>
 		</dict>
@@ -110,13 +110,13 @@
 			<key>icon</key>
 			<string>albumName.png</string>
 			<key>placeholder</key>
-			<string>DESIRED NAME</string>
+			<string>Desired Name…</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>footerText</key>
-			<string>A few options that’ll allow you to customize the behavior when taking a screenshot</string>
+			<string>A few options that’ll allow you to customize the behavior when taking a screenshot.</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -128,7 +128,7 @@
 			<key>key</key>
 			<string>showCameraFlash</string>
 			<key>label</key>
-			<string>Show Screen Flash</string>
+			<string>Screen Flash</string>
 			<key>PostNotification</key>
 			<string>com.efrederickson.almpoum/reloadSettings</string>
 		</dict>
@@ -156,7 +156,7 @@
 			<key>key</key>
 			<string>playShutterSound</string>
 			<key>label</key>
-			<string>Play Screenshot Sound</string>
+			<string>Screenshot Sound</string>
 			<key>PostNotification</key>
 			<string>com.efrederickson.almpoum/reloadSettings</string>
 		</dict>
@@ -170,7 +170,7 @@
 			<key>key</key>
 			<string>notifyApps</string>
 			<key>label</key>
-			<string>Notify apps of screenshot</string>
+			<string>Notify Apps of Screenshot</string>
 			<key>PostNotification</key>
 			<string>com.efrederickson.almpoum/reloadSettings</string>
 		</dict>
