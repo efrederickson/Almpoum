@@ -134,7 +134,6 @@
     }
     return self;
 }
-
 @end
 
 @interface CustomGiantFooterCell : PSTableCell {
@@ -150,6 +149,133 @@
         [self addSubview:_background];
     }
     return self;
+}
+
+@end
+
+@interface MakersListController : PSListController { }
+@end
+
+@implementation MakersListController
+- (id)specifiers {
+	if(_specifiers == nil) {
+		_specifiers = [[self loadSpecifiersFromPlistName:@"Makers" target:self] retain];
+	}
+	return _specifiers;
+}
+
+-(void) openGithub
+{
+    if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"ioc://"]])
+    {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"ioc://github.com/mlnlover11/Almpoum"]];
+    }
+    else
+    {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://github.com/mlnlover11/Almpoum"]];
+    }
+}
+@end
+
+@interface GiantMakerCell1 : PSTableCell {
+    UIImageView *_background;
+    UILabel *label;
+    UILabel *label2;
+    UIButton *twitterButton;
+    UIButton *githubButton;
+    UIButton *emailButton;
+}
+@end
+
+@implementation GiantMakerCell1
+-(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+	if((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])){
+        UIImage *bkIm = [[UIImage alloc] initWithContentsOfFile:@"/Library/PreferenceBundles/AlmpoumSettings.bundle/elijah@2x.png"];
+        _background = [[UIImageView alloc] initWithImage:bkIm];
+        _background.frame = CGRectMake(10, 15, 65, 70);
+        [self addSubview:_background];
+        
+        CGRect frame = [self frame];
+        
+        label = [[UILabel alloc] initWithFrame:CGRectMake(frame.origin.x + 80, frame.origin.y + 20, frame.size.width, frame.size.height)];
+        [label setText:@"Elijah Frederickson"];
+        [label setBackgroundColor:[UIColor clearColor]];
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+            [label setFont:[UIFont fontWithName:@"Helvetica Light" size:30]];
+        else
+            [label setFont:[UIFont fontWithName:@"Helvetica Light" size:25]];
+
+        [self addSubview:label];
+        
+        label2 = [[UILabel alloc] initWithFrame:CGRectMake(frame.origin.x + 80, frame.origin.y + 50, frame.size.width, frame.size.height)];
+        [label2 setText:@"The Developer"];
+        [label2 setBackgroundColor:[UIColor clearColor]];
+        [label2 setFont:[UIFont fontWithName:@"Helvetica Light" size:15]];
+        [self addSubview:label2];
+        
+        UIImage *btnImage = [UIImage imageNamed:@"twitter.png"];
+        twitterButton = [[UIButton alloc] initWithFrame:CGRectMake(frame.size.width - 70, 10, /*imgWidth*/100, /*imgHeight*/20)];
+        [twitterButton setImage:btnImage forState:UIControlStateNormal];
+        [self addSubview:twitterButton];
+        
+        btnImage = [UIImage imageNamed:@"github.png"];
+        githubButton = [[UIButton alloc] initWithFrame:CGRectMake(frame.size.width - 70, 30 /*imgWidth*/100, /*imgHeight*/20)];
+        [githubButton setImage:btnImage forState:UIControlStateNormal];
+        [self addSubview:githubButton];
+        
+        btnImage = [UIImage imageNamed:@"email.png"];
+        emailButton = [[UIButton alloc] initWithFrame:CGRectMake(frame.size.width - 70, 50, /*imgWidth*/100, /*imgHeight*/20)];
+        [emailButton setImage:btnImage forState:UIControlStateNormal];
+        [self addSubview:emailButton];
+    }
+    return self;
+}
+
+@end
+
+@interface GiantMakerCell2 : PSTableCell {
+    UIImageView *_background;
+    UILabel *label;
+    UILabel *label2;
+}
+@end
+
+@implementation GiantMakerCell2
+-(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+	if((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])){
+        UIImage *bkIm = [[UIImage alloc] initWithContentsOfFile:@"/Library/PreferenceBundles/AlmpoumSettings.bundle/andrew@2x.png"];
+        _background = [[UIImageView alloc] initWithImage:bkIm];
+        _background.frame = CGRectMake(10, 15, 65, 70);
+        [self addSubview:_background];
+        
+        CGRect frame = [self frame];
+        
+        label = [[UILabel alloc] initWithFrame:CGRectMake(frame.origin.x + 80, frame.origin.y + 20, frame.size.width, frame.size.height)];
+        [label setText:@"Andrew Abosh"];
+        [label setBackgroundColor:[UIColor clearColor]];
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+            [label setFont:[UIFont fontWithName:@"Helvetica Light" size:30]];
+        else
+            [label setFont:[UIFont fontWithName:@"Helvetica Light" size:25]];
+        
+        [self addSubview:label];
+        
+        label2 = [[UILabel alloc] initWithFrame:CGRectMake(frame.origin.x + 80, frame.origin.y + 50, frame.size.width, frame.size.height)];
+        [label2 setText:@"Graphics designer and inspiration"];
+        [label2 setBackgroundColor:[UIColor clearColor]];
+        [label2 setFont:[UIFont fontWithName:@"Helvetica Light" size:15]];
+        
+        [self addSubview:label2];
+        
+        //self->action = @selector(cellClicked);
+    }
+    return self;
+}
+
+//-(void)cellClicked {
+-(void)cellClicked:(id)clicked {
+    NSLog(@"cellClicked");
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://twitter.com/drewplex"]];
 }
 
 @end

@@ -57,7 +57,7 @@
 			<key>cell</key>
 			<string>PSLinkCell</string>
 			<key>detail</key>
-			<string>AlmpoumMakersController</string>
+			<string>MakersListController</string>
 			<key>label</key>
 			<string>The Makers</string>
 			<key>icon</key>
