@@ -19,6 +19,10 @@
 -(UINavigationController*)navigationController;
 @end
 
+@interface UIImage (Private)
++ (UIImage *)imageNamed:(NSString *)named inBundle:(NSBundle *)bundle;
+@end
+
 @interface AlmpoumSettingsListController: PSListController {}
 @end
 
@@ -67,7 +71,8 @@
     UIBarButtonItem *button = [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:nil action:nil];
     ((UINavigationItem*)self.navigationItem).rightBarButtonItem = button;*/
     
-    UIImage* image = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/AlmpoumSettings.bundle/heart@2x.png"];
+    //UIImage* image = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/AlmpoumSettings.bundle/heart@2x.png"];
+    UIImage* image = [UIImage imageNamed:@"heart.png" inBundle:[NSBundle bundleForClass:self.class]];
     CGRect frameimg = CGRectMake(0, 0, image.size.width, image.size.height);
     UIButton *someButton = [[UIButton alloc] initWithFrame:frameimg];
     [someButton setBackgroundImage:image forState:UIControlStateNormal];
@@ -94,7 +99,8 @@
                        animated:YES completion:nil];
     
     NSMutableDictionary *dict = [[[NSMutableDictionary alloc] initWithContentsOfFile:SETTINGS_FILE] autorelease];
-    [dict setValue:@1 forKey:@"useExtremeLanguage"];
+    
+    [dict setValue:([[dict valueForKey:@"useExtremeLanguage"] boolValue] == YES ? @NO : @YES) forKey:@"useExtremeLanguage"];
     [dict writeToFile:SETTINGS_FILE atomically:YES];
 }
 
@@ -183,7 +189,7 @@
 @implementation CustomGiantCell
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
 	if((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])){
-        UIImage *bkIm = [[UIImage alloc] initWithContentsOfFile:@"/Library/PreferenceBundles/AlmpoumSettings.bundle/logo@2x.png"];
+        UIImage *bkIm = [UIImage imageNamed:@"logo.png" inBundle:[NSBundle bundleForClass:self.class]];
         _background = [[UIImageView alloc] initWithImage:bkIm];
         [self addSubview:_background];
     }
@@ -199,7 +205,7 @@
 @implementation CustomGiantFooterCell
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
 	if((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])){
-        UIImage *bkIm = [[UIImage alloc] initWithContentsOfFile:@"/Library/PreferenceBundles/AlmpoumSettings.bundle/footer@2x.png"];
+        UIImage *bkIm = [UIImage imageNamed:@"footer.png" inBundle:[NSBundle bundleForClass:self.class]];
         _background = [[UIImageView alloc] initWithImage:bkIm];
         [self addSubview:_background];
     }
@@ -245,7 +251,7 @@
 @implementation GiantMakerCell1
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
 	if((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])){
-        UIImage *bkIm = [[UIImage alloc] initWithContentsOfFile:@"/Library/PreferenceBundles/AlmpoumSettings.bundle/elijah@2x.png"];
+        UIImage *bkIm = [UIImage imageNamed:@"elijah.png" inBundle:[NSBundle bundleForClass:self.class]];
         _background = [[UIImageView alloc] initWithImage:bkIm];
         _background.frame = CGRectMake(9, 18, 65, 65);
         [self addSubview:_background];
@@ -264,7 +270,7 @@
         
         label2 = [[UILabel alloc] initWithFrame:CGRectMake(frame.origin.x + 84, frame.origin.y + 42, frame.size.width, frame.size.height)];
         NSDictionary *dict = [[[NSDictionary alloc] initWithContentsOfFile:SETTINGS_FILE] autorelease];
-        BOOL useExtremeLanguage = [[dict valueForKey:@"useExtremeLanguage"] intValue] == 1 ? YES : NO;
+        BOOL useExtremeLanguage = [[dict valueForKey:@"useExtremeLanguage"] boolValue];
         if (useExtremeLanguage)
             [label2 setText:@"The L33T Developer"];
         else
@@ -288,7 +294,7 @@
 @implementation GiantMakerCell2
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
 	if((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])){
-        UIImage *bkIm = [[UIImage alloc] initWithContentsOfFile:@"/Library/PreferenceBundles/AlmpoumSettings.bundle/andrew@2x.png"];
+        UIImage *bkIm = [UIImage imageNamed:@"andrew.png" inBundle:[NSBundle bundleForClass:self.class]];
         _background = [[UIImageView alloc] initWithImage:bkIm];
         _background.frame = CGRectMake(9, 18, 65, 65);
         [self addSubview:_background];
@@ -308,7 +314,7 @@
         label2 = [[UILabel alloc] initWithFrame:CGRectMake(frame.origin.x + 84, frame.origin.y + 42, frame.size.width, frame.size.height)];
         
         NSDictionary *dict = [[[NSDictionary alloc] initWithContentsOfFile:SETTINGS_FILE] autorelease];
-        BOOL useExtremeLanguage = [[dict valueForKey:@"useExtremeLanguage"] intValue] == 1 ? YES : NO;
+        BOOL useExtremeLanguage = [[dict valueForKey:@"useExtremeLanguage"] boolValue];
         if (useExtremeLanguage)
             [label2 setText:@"Le Artist Of Le Graphics."];
         else
