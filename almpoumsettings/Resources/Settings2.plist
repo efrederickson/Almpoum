@@ -8,7 +8,7 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>footerText</key>
-			<string>Decides what you’d like Almpoum to do once you take a screenshot.</string>
+			<string>SAVE_MODE_FOOTER</string>
 		</dict>
 		<dict>
 			<key>PostNotification</key>
@@ -24,7 +24,7 @@
 			<key>key</key>
 			<string>saveMode</string>
 			<key>label</key>
-			<string>Screenshot Action</string>
+			<string>SAVE_MODE</string>
 			<key>validTitles</key>
 			<array>
 				<string>Prompt Me</string>
@@ -44,7 +44,7 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>footerText</key>
-			<string>These two settings allow you to always have a function done, regardless of the circumstance.</string>
+			<string>ALWAYS_SAVE_FOOTER</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -56,7 +56,7 @@
 			<key>key</key>
 			<string>copyToClipboard</string>
 			<key>label</key>
-			<string>Always Copy to Clipboard</string>
+			<string>ALWAYS_COPY_CLIPBOARD</string>
 			<key>PostNotification</key>
 			<string>com.efrederickson.almpoum/reloadSettings</string>
 		</dict>
@@ -70,7 +70,7 @@
 			<key>key</key>
 			<string>copyToPictures</string>
 			<key>label</key>
-			<string>Always Save to Photos</string>
+			<string>ALWAYS_SAVE_SS</string>
 			<key>PostNotification</key>
 			<string>com.efrederickson.almpoum/reloadSettings</string>
 		</dict>
@@ -78,7 +78,7 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>footerText</key>
-			<string>Feeling a little groovy, perhaps creative? Easily change the name of the album where all your screenshots will be saved.</string>
+			<string>ALBUMNAME_FOOTER</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -90,7 +90,7 @@
 			<key>key</key>
 			<string>saveToCustomAlbum</string>
 			<key>label</key>
-			<string>Save to Custom Album</string>
+			<string>SAVETOCUSTOMALBUM</string>
 			<key>PostNotification</key>
 			<string>com.efrederickson.almpoum/reloadSettings</string>
 		</dict>
@@ -104,7 +104,7 @@
 			<key>key</key>
 			<string>albumName</string>
 			<key>label</key>
-			<string>Album Name:</string>
+			<string>CUSTOM_ALBUM_NAME</string>
 			<key>PostNotification</key>
 			<string>com.efrederickson.almpoum/reloadSettings</string>
 			<key>icon</key>
@@ -116,7 +116,7 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>footerText</key>
-			<string>A few options that’ll allow you to customize the behavior when taking a screenshot.</string>
+			<string>OTHER_FOOTER</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -128,7 +128,7 @@
 			<key>key</key>
 			<string>showCameraFlash</string>
 			<key>label</key>
-			<string>Screen Flash</string>
+			<string>SCREEN_FLASH</string>
 			<key>PostNotification</key>
 			<string>com.efrederickson.almpoum/reloadSettings</string>
 		</dict>
@@ -142,7 +142,7 @@
 			<key>key</key>
 			<string>darkenCameraFlash</string>
 			<key>label</key>
-			<string>Darken Flash</string>
+			<string>DARKEN_FLASH</string>
 			<key>PostNotification</key>
 			<string>com.efrederickson.almpoum/reloadSettings</string>
 		</dict>
@@ -156,7 +156,7 @@
 			<key>key</key>
 			<string>playShutterSound</string>
 			<key>label</key>
-			<string>Screenshot Sound</string>
+			<string>SS_SOUND</string>
 			<key>PostNotification</key>
 			<string>com.efrederickson.almpoum/reloadSettings</string>
 		</dict>
@@ -170,7 +170,7 @@
 			<key>key</key>
 			<string>notifyApps</string>
 			<key>label</key>
-			<string>Notify Apps of Screenshot</string>
+			<string>NOTIFY_APPS</string>
 			<key>PostNotification</key>
 			<string>com.efrederickson.almpoum/reloadSettings</string>
 		</dict>

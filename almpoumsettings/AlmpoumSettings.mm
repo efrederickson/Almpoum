@@ -27,7 +27,36 @@
 	if(_specifiers == nil) {
 		_specifiers = [[self loadSpecifiersFromPlistName:@"AlmpoumSettings" target:self] retain];
 	}
+    [self localizedSpecifiersWithSpecifiers:_specifiers];
 	return _specifiers;
+}
+
+- (id)navigationTitle {
+	return [[self bundle] localizedStringForKey:[super title] value:[super title] table:nil];
+}
+
+- (id)localizedSpecifiersWithSpecifiers:(NSArray *)specifiers {
+    
+    NSLog(@"localizedSpecifiersWithSpecifiers");
+	for(PSSpecifier *curSpec in specifiers) {
+		NSString *name = [curSpec name];
+		if(name) {
+			[curSpec setName:[[self bundle] localizedStringForKey:name value:name table:nil]];
+		}
+		NSString *footerText = [curSpec propertyForKey:@"footerText"];
+		if(footerText)
+			[curSpec setProperty:[[self bundle] localizedStringForKey:footerText value:footerText table:nil] forKey:@"footerText"];
+		id titleDict = [curSpec titleDictionary];
+		if(titleDict) {
+			NSMutableDictionary *newTitles = [[NSMutableDictionary alloc] init];
+			for(NSString *key in titleDict) {
+				NSString *value = [titleDict objectForKey:key];
+				[newTitles setObject:[[self bundle] localizedStringForKey:value value:value table:nil] forKey: key];
+			}
+			[curSpec setTitleDictionary:newTitles];
+		}
+	}
+	return specifiers;
 }
 
 -(id) init
@@ -79,7 +108,36 @@
 	if(_specifiers == nil) {
 		_specifiers = [[self loadSpecifiersFromPlistName:@"Settings2" target:self] retain];
 	}
+    [self localizedSpecifiersWithSpecifiers:_specifiers];
 	return _specifiers;
+}
+
+- (id)navigationTitle {
+	return [[self bundle] localizedStringForKey:[super title] value:[super title] table:nil];
+}
+
+- (id)localizedSpecifiersWithSpecifiers:(NSArray *)specifiers {
+    
+    NSLog(@"localizedSpecifiersWithSpecifiers");
+	for(PSSpecifier *curSpec in specifiers) {
+		NSString *name = [curSpec name];
+		if(name) {
+			[curSpec setName:[[self bundle] localizedStringForKey:name value:name table:nil]];
+		}
+		NSString *footerText = [curSpec propertyForKey:@"footerText"];
+		if(footerText)
+			[curSpec setProperty:[[self bundle] localizedStringForKey:footerText value:footerText table:nil] forKey:@"footerText"];
+		id titleDict = [curSpec titleDictionary];
+		if(titleDict) {
+			NSMutableDictionary *newTitles = [[NSMutableDictionary alloc] init];
+			for(NSString *key in titleDict) {
+				NSString *value = [titleDict objectForKey:key];
+				[newTitles setObject:[[self bundle] localizedStringForKey:value value:value table:nil] forKey: key];
+			}
+			[curSpec setTitleDictionary:newTitles];
+		}
+	}
+	return specifiers;
 }
 @end
 
@@ -271,7 +329,21 @@
 
 @implementation openTwitterElijahController
 - (id)specifiers {
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://twitter.com/daementor"]];
+    NSString *user = @"daementor";
+    if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"tweetbot:"]])
+		[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[@"tweetbot:///user_profile/" stringByAppendingString:user]]];
+    
+	else if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"twitterrific:"]])
+		[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[@"twitterrific:///profile?screen_name=" stringByAppendingString:user]]];
+    
+	else if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"tweetings:"]])
+		[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[@"tweetings:///user?screen_name=" stringByAppendingString:user]]];
+    
+	else if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"twitter:"]])
+		[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[@"twitter://user?screen_name=" stringByAppendingString:user]]];
+    
+	else
+		[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[@"https://mobile.twitter.com/" stringByAppendingString:user]]];
 	return nil;
 }
 
@@ -286,8 +358,22 @@
 
 @implementation openTwitterAndrewController
 - (id)specifiers {
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://twitter.com/drewplex"]];
-    return nil;
+    NSString *user = @"drewplex";
+    if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"tweetbot:"]])
+		[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[@"tweetbot:///user_profile/" stringByAppendingString:user]]];
+    
+	else if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"twitterrific:"]])
+		[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[@"twitterrific:///profile?screen_name=" stringByAppendingString:user]]];
+    
+	else if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"tweetings:"]])
+		[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[@"tweetings:///user?screen_name=" stringByAppendingString:user]]];
+    
+	else if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"twitter:"]])
+		[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[@"twitter://user?screen_name=" stringByAppendingString:user]]];
+    
+	else
+		[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[@"https://mobile.twitter.com/" stringByAppendingString:user]]];
+	return nil;
 }
 
 - (void)viewDidAppear:(BOOL)arg1 {

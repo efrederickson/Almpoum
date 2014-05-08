@@ -29,7 +29,7 @@
 			<key>key</key>
 			<string>enabled</string>
 			<key>label</key>
-			<string>Enabled</string>
+			<string>ENABLED</string>
 			<key>PostNotification</key>
 			<string>com.efrederickson.almpoum/reloadSettings</string>
 			<key>icon</key>
@@ -45,7 +45,7 @@
 			<key>detail</key>
 			<string>ASettings2ListController</string>
 			<key>label</key>
-			<string>Options</string>
+			<string>OPTIONS</string>
 			<key>icon</key>
 			<string>settings.png</string>
 		</dict>
@@ -59,7 +59,7 @@
 			<key>detail</key>
 			<string>MakersListController</string>
 			<key>label</key>
-			<string>The Makers</string>
+			<string>MAKERS</string>
 			<key>icon</key>
 			<string>makers.png</string>
 		</dict>
@@ -71,7 +71,7 @@
 			<key>cell</key>
 			<string>PSLinkCell</string>
 			<key>label</key>
-			<string>Support</string>
+			<string>SUPPORT</string>
 			<key>icon</key>
 			<string>support.png</string>
 			<key>detail</key>

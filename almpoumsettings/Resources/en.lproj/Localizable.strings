@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ENABLED</key>
+	<string>Enabled</string>
+    <key>OPTIONS</key>
+    <string>Options</string>
+    <key>MAKERS</key>
+    <string>The Makers</string>
+    <key>SUPPORT</key>
+    <string>Support</string>
+    <key>SAVE_MODE</key>
+    <string>Screenshot Action</string>
+    <key>SAVE_MODE_FOOTER</key>
+    <string>Decides what you’d like Almpoum to do once you take a screenshot.</string>
+    <key>ALWAYS_SAVE_FOOTER</key>
+    <string>These two settings allow you to always have a function done, regardless of the circumstance.</string>
+    <key>ALWAYS_COPY_CLIPBOARD</key>
+    <string>Always Copy to Clipboard</string>
+    <key>ALWAYS_SAVE_SS</key>
+    <string>Always Save to Photos</string>
+    <key>ALBUMNAME_FOOTER</key>
+    <string>Feeling a little groovy, perhaps creative? Easily change the name of the album where all your screenshots will be saved.</string>
+    <key>SAVETOCUSTOMALBUM</key>
+    <string>Save to Custom Album</string>
+    <key>CUSTOM_ALBUM_NAME</key>
+    <string>Album Name:</string>
+    <key>OTHER_FOOTER</key>
+    <string>A few options that’ll allow you to customize the behavior when taking a screenshot.</string>
+<key>SCREEN_FLASH</key>
+<string>Screen Flash</string>
+<key>DARKEN_FLASH</key>
+<string>Darken Flash</string>
+<key>SS_SOUND</key>
+<string>Screenshot Sound</string>
+<key>NOTIFY_APPS</key>
+<string>Notify Apps of Screenshot</string>
+</dict>
+</plist>
