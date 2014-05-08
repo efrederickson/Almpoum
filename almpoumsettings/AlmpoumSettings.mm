@@ -4,6 +4,8 @@
 #import <Social/SLComposeViewController.h>
 #import <Social/SLServiceTypes.h>
 
+#define SETTINGS_FILE @"/var/mobile/Library/Preferences/com.efrederickson.almpoum.settings.plist"
+
 
 @interface PSTableCell (Almpoum)
 @property (nonatomic, retain) UIView *backgroundView;
@@ -14,6 +16,7 @@
 @interface PSListController (Almpoum)
 - (void)presentViewController:(UIViewController *)viewControllerToPresent animated:(BOOL)flag completion:(void (^)(void))completion;
 - (void)dismissViewControllerAnimated:(BOOL)flag completion:(void (^)(void))completion;
+-(UINavigationController*)navigationController;
 @end
 
 @interface AlmpoumSettingsListController: PSListController {}
@@ -60,6 +63,10 @@
     
     [self presentViewController:composeController
                        animated:YES completion:nil];
+    
+    NSMutableDictionary *dict = [[[NSMutableDictionary alloc] initWithContentsOfFile:SETTINGS_FILE] autorelease];
+    [dict setValue:@1 forKey:@"useExtremeLanguage"];
+    [dict writeToFile:SETTINGS_FILE atomically:YES];
 }
 
 @end
@@ -84,38 +91,28 @@
 @implementation AlmpoumSupportController
 
 -(id) specifiers {
-    if (_specifiers == nil)
+    if (!mailViewController && [MFMailComposeViewController canSendMail])
     {
-        if (!mailViewController && [MFMailComposeViewController canSendMail])
-        {
-            mailViewController = [[MFMailComposeViewController alloc] init];
-            mailViewController.mailComposeDelegate = self;
-            [mailViewController setSubject:@"Almpoum"];
-            [mailViewController setMessageBody:@"" isHTML:NO];
-            [mailViewController setToRecipients:[NSArray arrayWithObjects:@"elijah.frederickson@gmail.com",@"andrewaboshartworks@gmail.com",nil]];
-            [mailViewController addAttachmentData:[[NSFileManager defaultManager] contentsAtPath:@"/var/mobile/Library/Preferences/com.efrederickson.almpoum.settings.plist"] mimeType:@"text/plain" fileName:@"almpoum.settings.plist"];
+        mailViewController = [[MFMailComposeViewController alloc] init];
+        mailViewController.mailComposeDelegate = self;
+        [mailViewController setSubject:@"Almpoum"];
+        [mailViewController setMessageBody:@"" isHTML:NO];
+        [mailViewController setToRecipients:[NSArray arrayWithObjects:@"elijah.frederickson@gmail.com",@"andrewaboshartworks@gmail.com",nil]];
+        [mailViewController addAttachmentData:[[NSFileManager defaultManager] contentsAtPath:@"/var/mobile/Library/Preferences/com.efrederickson.almpoum.settings.plist"] mimeType:@"text/plain" fileName:@"almpoum.settings.plist"];
         
-            [self.rootController presentViewController:mailViewController animated:YES completion:nil];
-            //[mailViewController release];
-        }
-        //[[super navigationController] popViewControllerAnimated:YES];
-        
-        NSMutableArray *specifiers = [NSMutableArray array];
-        [specifiers addObject:[PSSpecifier preferenceSpecifierNamed:@"Thank you"
-                                                             target:self set:NULL get:NULL
-                                                             detail:Nil
-                                                               cell:PSStaticTextCell
-                                                               edit:Nil]];
-        _specifiers = specifiers;
+        [self.rootController presentViewController:mailViewController animated:YES completion:nil];
+        //[mailViewController release];
     }
-    return _specifiers;
+    //[[super navigationController] popViewControllerAnimated:YES];
+        
+    return nil;
 }
 
 -(void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
     [self dismissViewControllerAnimated:YES completion:NULL];
     
-    //[self.rootController popController];
-    //[[super navigationController] popViewControllerAnimated:YES];
+    UINavigationController *navController = self.navigationController;
+    [navController popViewControllerAnimated:YES];
 }
 
 @end
@@ -192,41 +189,31 @@
 	if((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])){
         UIImage *bkIm = [[UIImage alloc] initWithContentsOfFile:@"/Library/PreferenceBundles/AlmpoumSettings.bundle/elijah@2x.png"];
         _background = [[UIImageView alloc] initWithImage:bkIm];
-        _background.frame = CGRectMake(10, 15, 65, 70);
+        _background.frame = CGRectMake(9, 18, 65, 65);
         [self addSubview:_background];
         
         CGRect frame = [self frame];
         
-        label = [[UILabel alloc] initWithFrame:CGRectMake(frame.origin.x + 80, frame.origin.y + 20, frame.size.width, frame.size.height)];
+        label = [[UILabel alloc] initWithFrame:CGRectMake(frame.origin.x + 84, frame.origin.y + 18, frame.size.width, frame.size.height)];
         [label setText:@"Elijah Frederickson"];
         [label setBackgroundColor:[UIColor clearColor]];
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
             [label setFont:[UIFont fontWithName:@"Helvetica Light" size:30]];
         else
-            [label setFont:[UIFont fontWithName:@"Helvetica Light" size:25]];
+            [label setFont:[UIFont fontWithName:@"Helvetica Light" size:21]];
 
         [self addSubview:label];
         
-        label2 = [[UILabel alloc] initWithFrame:CGRectMake(frame.origin.x + 80, frame.origin.y + 50, frame.size.width, frame.size.height)];
-        [label2 setText:@"The Developer"];
+        label2 = [[UILabel alloc] initWithFrame:CGRectMake(frame.origin.x + 84, frame.origin.y + 42, frame.size.width, frame.size.height)];
+        NSDictionary *dict = [[[NSDictionary alloc] initWithContentsOfFile:SETTINGS_FILE] autorelease];
+        BOOL useExtremeLanguage = [[dict valueForKey:@"useExtremeLanguage"] intValue] == 1 ? YES : NO;
+        if (useExtremeLanguage)
+            [label2 setText:@"The L33T Developer"];
+        else
+            [label2 setText:@"The Developer"];
         [label2 setBackgroundColor:[UIColor clearColor]];
         [label2 setFont:[UIFont fontWithName:@"Helvetica Light" size:15]];
         [self addSubview:label2];
-        
-        UIImage *btnImage = [UIImage imageNamed:@"twitter.png"];
-        twitterButton = [[UIButton alloc] initWithFrame:CGRectMake(frame.size.width - 70, 10, /*imgWidth*/100, /*imgHeight*/20)];
-        [twitterButton setImage:btnImage forState:UIControlStateNormal];
-        [self addSubview:twitterButton];
-        
-        btnImage = [UIImage imageNamed:@"github.png"];
-        githubButton = [[UIButton alloc] initWithFrame:CGRectMake(frame.size.width - 70, 30 /*imgWidth*/100, /*imgHeight*/20)];
-        [githubButton setImage:btnImage forState:UIControlStateNormal];
-        [self addSubview:githubButton];
-        
-        btnImage = [UIImage imageNamed:@"email.png"];
-        emailButton = [[UIButton alloc] initWithFrame:CGRectMake(frame.size.width - 70, 50, /*imgWidth*/100, /*imgHeight*/20)];
-        [emailButton setImage:btnImage forState:UIControlStateNormal];
-        [self addSubview:emailButton];
     }
     return self;
 }
@@ -245,23 +232,29 @@
 	if((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])){
         UIImage *bkIm = [[UIImage alloc] initWithContentsOfFile:@"/Library/PreferenceBundles/AlmpoumSettings.bundle/andrew@2x.png"];
         _background = [[UIImageView alloc] initWithImage:bkIm];
-        _background.frame = CGRectMake(10, 15, 65, 70);
+        _background.frame = CGRectMake(9, 18, 65, 65);
         [self addSubview:_background];
         
         CGRect frame = [self frame];
         
-        label = [[UILabel alloc] initWithFrame:CGRectMake(frame.origin.x + 80, frame.origin.y + 20, frame.size.width, frame.size.height)];
+        label = [[UILabel alloc] initWithFrame:CGRectMake(frame.origin.x + 84, frame.origin.y + 18, frame.size.width, frame.size.height)];
         [label setText:@"Andrew Abosh"];
         [label setBackgroundColor:[UIColor clearColor]];
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
             [label setFont:[UIFont fontWithName:@"Helvetica Light" size:30]];
         else
-            [label setFont:[UIFont fontWithName:@"Helvetica Light" size:25]];
+            [label setFont:[UIFont fontWithName:@"Helvetica Light" size:21]];
         
         [self addSubview:label];
         
-        label2 = [[UILabel alloc] initWithFrame:CGRectMake(frame.origin.x + 80, frame.origin.y + 50, frame.size.width, frame.size.height)];
-        [label2 setText:@"Graphics designer and inspiration"];
+        label2 = [[UILabel alloc] initWithFrame:CGRectMake(frame.origin.x + 84, frame.origin.y + 42, frame.size.width, frame.size.height)];
+        
+        NSDictionary *dict = [[[NSDictionary alloc] initWithContentsOfFile:SETTINGS_FILE] autorelease];
+        BOOL useExtremeLanguage = [[dict valueForKey:@"useExtremeLanguage"] intValue] == 1 ? YES : NO;
+        if (useExtremeLanguage)
+            [label2 setText:@"Le Artist Of Le Graphics."];
+        else
+            [label2 setText:@"The Graphic Artist"];
         [label2 setBackgroundColor:[UIColor clearColor]];
         [label2 setFont:[UIFont fontWithName:@"Helvetica Light" size:15]];
         
@@ -271,12 +264,39 @@
     }
     return self;
 }
-
-//-(void)cellClicked {
--(void)cellClicked:(id)clicked {
-    NSLog(@"cellClicked");
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://twitter.com/drewplex"]];
-}
-
 @end
 
+@interface openTwitterElijahController : PSListController { }
+@end
+
+@implementation openTwitterElijahController
+- (id)specifiers {
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://twitter.com/daementor"]];
+	return nil;
+}
+
+- (void)viewDidAppear:(BOOL)arg1 {
+    UINavigationController *navController = self.navigationController;
+    [navController popViewControllerAnimated:YES];
+}
+@end
+
+@interface openTwitterAndrewController : PSListController { }
+@end
+
+@implementation openTwitterAndrewController
+- (id)specifiers {
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://twitter.com/drewplex"]];
+    return nil;
+}
+
+- (void)viewDidAppear:(BOOL)arg1 {
+    UINavigationController *navController = self.navigationController;
+    [navController popViewControllerAnimated:YES];
+    
+    //[super popController];
+    //[self.navigationController popToViewController:self.rootController animated:YES];
+    //int count = [self.navigationController.viewControllers count];
+    //[navController popToViewController:[navController.viewControllers objectAtIndex:0] animated:YES];
+}
+@end

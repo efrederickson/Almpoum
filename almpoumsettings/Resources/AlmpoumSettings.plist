@@ -45,7 +45,7 @@
 			<key>detail</key>
 			<string>ASettings2ListController</string>
 			<key>label</key>
-			<string>Settings</string>
+			<string>Options</string>
 			<key>icon</key>
 			<string>settings.png</string>
 		</dict>
