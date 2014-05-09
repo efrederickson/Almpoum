@@ -4,7 +4,7 @@ include theos/makefiles/common.mk
 BUNDLE_NAME = AlmpoumSettings
 AlmpoumSettings_FILES = AlmpoumSettings.mm
 AlmpoumSettings_INSTALL_PATH = /Library/PreferenceBundles
-AlmpoumSettings_FRAMEWORKS = UIKit MessageUI Social
+AlmpoumSettings_FRAMEWORKS = UIKit MessageUI Social QuartzCore CoreGraphics
 AlmpoumSettings_PRIVATE_FRAMEWORKS = Preferences
 
 include $(THEOS_MAKE_PATH)/bundle.mk

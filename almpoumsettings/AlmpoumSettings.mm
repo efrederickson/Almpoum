@@ -191,6 +191,9 @@
 	if((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])){
         UIImage *bkIm = [UIImage imageNamed:@"logo.png" inBundle:[NSBundle bundleForClass:self.class]];
         _background = [[UIImageView alloc] initWithImage:bkIm];
+        //_background.frame = [self frame];
+        //[_background setContentMode:UIViewContentModeCenter];
+        //[_background setCenter:CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds))];
         [self addSubview:_background];
     }
     return self;
@@ -207,6 +210,8 @@
 	if((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])){
         UIImage *bkIm = [UIImage imageNamed:@"footer.png" inBundle:[NSBundle bundleForClass:self.class]];
         _background = [[UIImageView alloc] initWithImage:bkIm];
+        //[_background setContentMode:UIViewContentModeCenter];
+        //_background.frame = [self frame];
         [self addSubview:_background];
     }
     return self;

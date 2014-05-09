@@ -25,6 +25,7 @@ extern "C" UIImage *_UICreateScreenUIImageWithRotation(BOOL rotate);
 #define kPhotoShutterSystemSound 0x454
 #define SETTINGS_FILE @"/var/mobile/Library/Preferences/com.efrederickson.almpoum.settings.plist"
 #define SETTINGS_EVENT "com.efrederickson.almpoum/reloadSettings"
+#define IS_OS_7_OR_LATER    ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
 
 BOOL enabled = YES;
 NSString *albumName = @"Screenshots";
@@ -175,7 +176,7 @@ static void saveScreenshot(UIImage *screenshot)
             saveScreenshot(screenshot);
         }
 
-        if (notifyApps)
+        if (notifyApps && IS_OS_7_OR_LATER)
         {
             SBApplication *frontMostApplication = [(SpringBoard *)[UIApplication sharedApplication] _accessibilityFrontMostApplication];
             [frontMostApplication.remoteApplication didTakeScreenshot];
