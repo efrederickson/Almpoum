@@ -5,6 +5,7 @@
 #import <Social/SLServiceTypes.h>
 
 #define SETTINGS_FILE @"/var/mobile/Library/Preferences/com.efrederickson.almpoum.settings.plist"
+#define IS_OS_7_OR_LATER    ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
 
 
 @interface PSTableCell (Almpoum)
@@ -32,6 +33,10 @@
 		_specifiers = [[self loadSpecifiersFromPlistName:@"AlmpoumSettings" target:self] retain];
 	}
     [self localizedSpecifiersWithSpecifiers:_specifiers];
+    
+    if (IS_OS_7_OR_LATER)
+        [self setTitle:@""];
+    
 	return _specifiers;
 }
 

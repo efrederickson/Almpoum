@@ -37,6 +37,7 @@ BOOL notifyApps = NO;
 BOOL copyToClipboard = NO;
 BOOL copyToPictures = NO;
 int saveMode = 1;
+BOOL uploadToPhotoStreams = YES;
 
 static UIImage *screenshot;
 
@@ -98,6 +99,11 @@ static void reloadSettings(CFNotificationCenterRef center,
         saveMode = [[prefs objectForKey:@"saveMode"] intValue];
     else
         saveMode = 1;
+
+    if ([prefs objectForKey:@"uploadToPhotoStreams"] != nil)
+        uploadToPhotoStreams = [[prefs objectForKey:@"uploadToPhotoStreams"] boolValue];
+    else
+        uploadToPhotoStreams = YES;
 }
 
 static void saveScreenshot(UIImage *screenshot)
@@ -126,19 +132,16 @@ static void saveScreenshot(UIImage *screenshot)
     }
 }
 
-%group ALL
 %hook SBScreenFlash
 -(void) flashColor:(UIColor*)color
 {
-    if (darkenCameraFlash)
+    if (darkenCameraFlash && enabled)
         %orig([UIColor blackColor]);
     else
         %orig;
 }
 %end
-%end // group ALL
 
-%group MAIN
 %hook SBScreenShotter // <UIAlertViewDelegate>
 -(void)saveScreenshot:(BOOL)arg1 
 {
@@ -213,12 +216,18 @@ static void saveScreenshot(UIImage *screenshot)
     }
 }
 %end
-%end // group MAIN
+
+%hook PLPhotoStreamsHelper
+
+- (BOOL)shouldPublishScreenShots {
+	return enabled ? uploadToPhotoStreams : %orig;
+}
+
+%end
 
 %ctor
 {
-    %init(ALL);
-    %init(MAIN);
+    %init;
     NSLog(@"Almpoum: initialized SpringBoard hooks");
 
     CFNotificationCenterRef r = CFNotificationCenterGetDarwinNotifyCenter();

@@ -36,5 +36,7 @@
     <string>Screenshot Sound</string>
     <key>NOTIFY_APPS</key>
     <string>Notify Apps of Screenshot</string>
+    <key>UPLOAD_TO_PHOTO_STREAM</key>
+    <string>Upload to Photo Stream</string>
 </dict>
 </plist>
