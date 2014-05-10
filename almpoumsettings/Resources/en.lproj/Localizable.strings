@@ -27,7 +27,7 @@
     <key>CUSTOM_ALBUM_NAME</key>
     <string>Album Name:</string>
     <key>OTHER_FOOTER</key>
-    <string>A few options that’ll allow you to customize the behavior when taking a screenshot. Please note that Notify Apps only works on iOS 7</string>
+    <string>A few options that’ll allow you to customize the behavior when taking a screenshot. Please keep in mind that "Notify Apps of Screenshot" will only work on iOS 7.</string>
     <key>SCREEN_FLASH</key>
     <string>Screen Flash</string>
     <key>DARKEN_FLASH</key>
