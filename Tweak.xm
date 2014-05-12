@@ -222,11 +222,11 @@ static void saveScreenshot(UIImage *screenshot)
 %end
 
 %hook PLPhotoStreamsHelper
-
 - (BOOL)shouldPublishScreenShots {
-	return enabled ? uploadToPhotoStreams : %orig;
+	if (enabled)
+        return uploadToPhotoStreams;
+    return %orig;
 }
-
 %end
 
 %ctor

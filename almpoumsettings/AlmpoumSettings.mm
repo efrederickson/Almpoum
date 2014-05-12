@@ -167,7 +167,7 @@
         [mailViewController setSubject:@"Almpoum"];
         [mailViewController setMessageBody:@"" isHTML:NO];
         [mailViewController setToRecipients:[NSArray arrayWithObjects:@"elijah.frederickson@gmail.com",@"andrewaboshartworks@gmail.com",nil]];
-        [mailViewController addAttachmentData:[[NSFileManager defaultManager] contentsAtPath:@"/var/mobile/Library/Preferences/com.efrederickson.almpoum.settings.plist"] mimeType:@"text/plain" fileName:@"almpoum.settings.plist"];
+        [mailViewController addAttachmentData:[[NSFileManager defaultManager] contentsAtPath:@"/var/mobile/Library/Preferences/com.efrederickson.almpoum.settings.plist"] mimeType:@"application/x-plist" fileName:@"almpoum.settings.plist"];
         
         [self.rootController presentViewController:mailViewController animated:YES completion:nil];
         //[mailViewController release];
