@@ -7,7 +7,7 @@ include theos/makefiles/common.mk
 
 TWEAK_NAME = Almpoum
 Almpoum_FILES = ALAssetsLibrary+CustomPhotoAlbum.m Tweak.xm 
-Almpoum_FRAMEWORKS = AssetsLibrary MobileCoreServices UIKit CoreGraphics AudioToolbox Foundation
+Almpoum_FRAMEWORKS = AssetsLibrary MobileCoreServices UIKit CoreGraphics AudioToolbox
 
 include $(THEOS_MAKE_PATH)/tweak.mk
 
