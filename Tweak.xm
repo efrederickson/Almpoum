@@ -173,10 +173,14 @@ static void saveScreenshot(UIImage *screenshot)
         }
         if (saveMode == 4) // Both
         { 
-            UIPasteboard *pb = [UIPasteboard generalPasteboard];
-            [pb setData:UIImagePNGRepresentation(screenshot) forPasteboardType:(__bridge NSString *)kUTTypePNG];
+            if (!copyToClipboard)
+            {
+                UIPasteboard *pb = [UIPasteboard generalPasteboard];
+                [pb setData:UIImagePNGRepresentation(screenshot) forPasteboardType:(__bridge NSString *)kUTTypePNG];
+            }
             
-            saveScreenshot(screenshot);
+            if (!copyToPictures)
+                saveScreenshot(screenshot);
         }
 
         if (notifyApps && IS_OS_7_OR_LATER)
