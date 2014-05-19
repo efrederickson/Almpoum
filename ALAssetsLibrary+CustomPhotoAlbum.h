@@ -8,6 +8,19 @@
 #import <Foundation/Foundation.h>
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <UIKit/UIImage.h>
+#import <ImageIO/ImageIO.h>
+
+extern CGImageSourceRef CGImageSourceCreateWithData (
+                                              CFDataRef data,
+                                              CFDictionaryRef options
+                                              );
+
+extern CFDictionaryRef CGImageSourceCopyPropertiesAtIndex (
+                                                           CGImageSourceRef isrc,
+                                                           size_t index,
+                                                           CFDictionaryRef options
+                                                           );
+
 
 
 @interface ALAssetsLibrary (CustomPhotoAlbum)

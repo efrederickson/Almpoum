@@ -99,11 +99,22 @@
        completion:(ALAssetsLibraryWriteImageCompletionBlock)completion
           failure:(ALAssetsLibraryAccessFailureBlock)failure
 {
-  [self writeImageToSavedPhotosAlbum:image.CGImage
+  /*[self writeImageToSavedPhotosAlbum:image.CGImage
                          orientation:(ALAssetOrientation)image.imageOrientation 
                      completionBlock:[self _resultBlockOfAddingToAlbum:albumName
                                                             completion:completion
                                                                failure:failure]];
+   */
+    
+    NSData *imgData = UIImagePNGRepresentation(image);
+    CGImageSourceRef source = CGImageSourceCreateWithData((__bridge CFDataRef)imgData, NULL);
+    NSDictionary *metadata = (__bridge NSDictionary *) CGImageSourceCopyPropertiesAtIndex(source, 0, NULL);
+    
+    [self writeImageDataToSavedPhotosAlbum:imgData
+                                  metadata:metadata
+                           completionBlock:[self _resultBlockOfAddingToAlbum:albumName
+                                                                  completion:completion
+                                                                     failure:failure]];
 }
 
 - (void)saveVideo:(NSURL *)videoUrl
