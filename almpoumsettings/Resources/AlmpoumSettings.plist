@@ -77,18 +77,6 @@
 			<key>detail</key>
 			<string>AlmpoumSupportController</string>
 		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSStaticTextCell</string>
-			<key>cellClass</key>
-			<string>CustomGiantFooterCell</string>
-			<key>height</key>
-			<integer>65</integer>
-		</dict>
 	</array>
 	<key>title</key>
 	<string>Almpoum</string>

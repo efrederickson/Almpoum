@@ -232,7 +232,7 @@ static void saveScreenshot(UIImage *screenshot)
 %ctor
 {
     %init;
-    NSLog(@"Almpoum: initialized SpringBoard hooks");
+    //NSLog(@"Almpoum: initialized SpringBoard hooks");
 
     CFNotificationCenterRef r = CFNotificationCenterGetDarwinNotifyCenter();
     CFNotificationCenterAddObserver(r, NULL, &reloadSettings, CFSTR(SETTINGS_EVENT), NULL, 0);
