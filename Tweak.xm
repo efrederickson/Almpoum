@@ -179,6 +179,13 @@ static void saveScreenshot(UIImage *screenshot)
         CGImageRelease(imageRef);
     }
     
+    id dragWindow = %c(DragWindow);
+    if (dragWindow)
+    {
+        id *window = [[DragWindow alloc] initWithFrame:[[[UIApplication sharedApplication] keyWindow] frame]];
+        [window makeKeyAndVisible];
+    }
+
     id dragView = %c(DragView);
     if (dragView)
     {
