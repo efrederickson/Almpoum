@@ -18,8 +18,9 @@
 -(void)didTakeScreenshot;
 @end
 
-@interface SBApplication (CSS)
+@interface SBApplication (Almpoum)
 -(UIRemoteApplication*)remoteApplication;
+- (BOOL)statusBarHidden;
 @end
 
 extern "C" UIImage *_UICreateScreenUIImageWithRotation(BOOL rotate);
@@ -28,6 +29,7 @@ extern "C" UIImage *_UICreateScreenUIImageWithRotation(BOOL rotate);
 #define SETTINGS_EVENT "com.efrederickson.almpoum/reloadSettings"
 #define IS_OS_7_OR_LATER    ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
 #define IMGUR_CLIENT_ID @"4fb524843c272ea"
+#define IS_RETINA ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)] && ([UIScreen mainScreen].scale == 2.0))
 
 BOOL enabled = YES;
 NSString *albumName = @"Screenshots";
@@ -40,6 +42,7 @@ BOOL copyToClipboard = NO;
 BOOL copyToPictures = NO;
 int saveMode = 1;
 BOOL uploadToPhotoStreams = YES;
+BOOL hideStatusBar = NO;
 
 static UIImage *screenshot;
 
@@ -106,6 +109,11 @@ static void reloadSettings(CFNotificationCenterRef center,
         uploadToPhotoStreams = [[prefs objectForKey:@"uploadToPhotoStreams"] boolValue];
     else
         uploadToPhotoStreams = YES;
+
+    if ([prefs objectForKey:@"hideStatusBar"] != nil)
+        hideStatusBar = [[prefs objectForKey:@"hideStatusBar"] boolValue];
+    else
+        hideStatusBar = NO;
 }
 
 static void saveScreenshot(UIImage *screenshot)
@@ -155,6 +163,20 @@ static void saveScreenshot(UIImage *screenshot)
     }
 
     screenshot = _UICreateScreenUIImageWithRotation(TRUE);
+    
+    if([[(SpringBoard *)[UIApplication sharedApplication] _accessibilityFrontMostApplication] statusBarHidden])
+    {
+        CGRect newSSFrame;
+        if (IS_RETINA)
+            newSSFrame = CGRectMake(0, 20 * 2, screenshot.size.width * 2, (screenshot.size.height - 20) * 2);
+        else
+            newSSFrame = CGRectMake(0, 20, screenshot.size.width, screenshot.size.height - 20);
+            
+        CGImageRef imageRef = CGImageCreateWithImageInRect(screenshot.CGImage, newSSFrame);
+        screenshot = [UIImage imageWithCGImage:imageRef];
+        CGImageRelease(imageRef);
+    }
+
 	if (screenshot) {
         if (saveMode == 1) // Prompt
         { 

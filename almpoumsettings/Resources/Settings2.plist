@@ -176,6 +176,20 @@
 			<key>PostNotification</key>
 			<string>com.efrederickson.almpoum/reloadSettings</string>
 		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.efrederickson.almpoum.settings</string>
+			<key>key</key>
+			<string>hideStatusBar</string>
+			<key>label</key>
+			<string>HIDE_STATUS_BAR</string>
+			<key>PostNotification</key>
+			<string>com.efrederickson.almpoum/reloadSettings</string>
+		</dict>
 		<!--<dict>
 			<key>cell</key>
 			<string>PSSwitchCell</string>

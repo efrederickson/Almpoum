@@ -38,5 +38,7 @@
     <string>Notify Apps of Screenshot</string>
     <key>UPLOAD_TO_PHOTO_STREAM</key>
     <string>Upload to Photo Stream</string>
+    <key>HIDE_STATUS_BAR</key>
+    <string>Hide status bar</string>
 </dict>
 </plist>
