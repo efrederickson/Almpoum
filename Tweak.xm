@@ -6,6 +6,7 @@
 #import <SpringBoard/SBApplication.h>
 #import <dlfcn.h>
 #import <MobileCoreServices/MobileCoreServices.h> // For the UTI types constants
+#import "MLIMGURUploader.h"
 
 @interface SBScreenShotter
 +(id)sharedInstance;
@@ -26,6 +27,7 @@ extern "C" UIImage *_UICreateScreenUIImageWithRotation(BOOL rotate);
 #define SETTINGS_FILE @"/var/mobile/Library/Preferences/com.efrederickson.almpoum.settings.plist"
 #define SETTINGS_EVENT "com.efrederickson.almpoum/reloadSettings"
 #define IS_OS_7_OR_LATER    ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
+#define IMGUR_CLIENT_ID @"4fb524843c272ea"
 
 BOOL enabled = YES;
 NSString *albumName = @"Screenshots";
@@ -159,6 +161,7 @@ static void saveScreenshot(UIImage *screenshot)
            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Almpoum" message:@"What would you like to happen to that Screenshot?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
             [alert addButtonWithTitle:@"Save to Photo Library"];
             [alert addButtonWithTitle:@"Copy to the Clipboard"];
+            [alert addButtonWithTitle:@"Upload to Imgur"];
             [alert addButtonWithTitle:@"Both"];
             [alert show];
         }
@@ -182,6 +185,18 @@ static void saveScreenshot(UIImage *screenshot)
             if (!copyToPictures)
                 saveScreenshot(screenshot);
         }
+        if (saveMode == 5) // IMGUR
+        {
+            [MLIMGURUploader uploadPhoto:UIImagePNGRepresentation(screenshot)
+                title:@"Almpoum Screenshot"
+                description:@""
+                imgurClientID:IMGUR_CLIENT_ID
+                completionBlock:^(NSString *result)
+                    {
+                        [[UIPasteboard generalPasteboard] setString:result];
+                    }
+                failureBlock:^(NSURLResponse *response, NSError *error, NSInteger status){ }];
+        }
 
         if (notifyApps && IS_OS_7_OR_LATER)
         {
@@ -201,17 +216,33 @@ static void saveScreenshot(UIImage *screenshot)
 }
 
 %new
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 1) {
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex 
+{
+    if (buttonIndex == 1) 
+    {
         // Photo library
         saveScreenshot(screenshot);
     }
-    else if (buttonIndex == 2) {
+    else if (buttonIndex == 2) 
+    {
         // pasteboard
         UIPasteboard *pb = [UIPasteboard generalPasteboard];
         [pb setData:UIImagePNGRepresentation(screenshot) forPasteboardType:(__bridge NSString *)kUTTypePNG];
     }
-    else if (buttonIndex == 3) {
+    else if (buttonIndex == 3)
+    { // IMGUR
+        [MLIMGURUploader uploadPhoto:UIImagePNGRepresentation(screenshot)
+            title:@"Almpoum Screenshot"
+            description:@""
+            imgurClientID:IMGUR_CLIENT_ID
+            completionBlock:^(NSString *result)
+                {
+                    [[UIPasteboard generalPasteboard] setString:result];
+                }
+            failureBlock:^(NSURLResponse *response, NSError *error, NSInteger status){ }];
+    }
+    else if (buttonIndex == 4) 
+    {
         // both
         UIPasteboard *pb = [UIPasteboard generalPasteboard];
         [pb setData:UIImagePNGRepresentation(screenshot) forPasteboardType:(__bridge NSString *)kUTTypePNG];
@@ -232,7 +263,6 @@ static void saveScreenshot(UIImage *screenshot)
 %ctor
 {
     %init;
-    //NSLog(@"Almpoum: initialized SpringBoard hooks");
 
     CFNotificationCenterRef r = CFNotificationCenterGetDarwinNotifyCenter();
     CFNotificationCenterAddObserver(r, NULL, &reloadSettings, CFSTR(SETTINGS_EVENT), NULL, 0);

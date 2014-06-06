@@ -30,6 +30,7 @@
 				<string>Prompt Me</string>
 				<string>Save to Photo Library</string>
 				<string>Copy to the Clipboard</string>
+				<string>Upload to Imgur</string>
 				<string>Both</string>
 			</array>
 			<key>validValues</key>
@@ -37,6 +38,7 @@
 				<string>1</string>
 				<string>2</string>
 				<string>3</string>
+				<string>5</string>
 				<string>4</string>
 			</array>
 		</dict>
