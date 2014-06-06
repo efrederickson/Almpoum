@@ -27,6 +27,17 @@
 - (BOOL)statusBarHidden;
 @end
 
+@interface BBBulletinRequest : NSObject
+@property (nonatomic, copy) NSString *title;
+@property (nonatomic, copy) NSString *message;
+@property (nonatomic, copy) NSString *sectionID;
+@end
+
+@interface SBBulletinBannerController : NSObject
++ (SBBulletinBannerController *)sharedInstance;
+- (void)observer:(id)observer addBulletin:(BBBulletinRequest *)bulletin forFeed:(int)feed;
+@end
+
 extern "C" UIImage *_UICreateScreenUIImageWithRotation(BOOL rotate);
 extern "C" UIImage* _UICreateScreenUIImage();
 
@@ -148,6 +159,21 @@ static void saveScreenshot(UIImage *screenshot)
     }
 }
 
+void showBanner()
+{
+    Class bulletinBannerController = objc_getClass("SBBulletinBannerController");
+	Class bulletinRequest = objc_getClass("BBBulletinRequest");
+    
+	if (bulletinBannerController && bulletinRequest) {
+		BBBulletinRequest *request = [[bulletinRequest alloc] init];
+		request.title = @"Almpoum";
+		request.message = @"Image uploaded & link copied";
+		request.sectionID = @"com.apple.Preferences";
+		[(SBBulletinBannerController *)[bulletinBannerController sharedInstance] observer:nil addBulletin:request forFeed:2];
+		return;
+	}
+}
+
 %hook SBScreenFlash
 -(void) flashColor:(UIColor*)color
 {
@@ -170,7 +196,7 @@ static void saveScreenshot(UIImage *screenshot)
 
     screenshot = _UICreateScreenUIImageWithRotation(TRUE);
     
-    if([[(SpringBoard *)[UIApplication sharedApplication] _accessibilityFrontMostApplication] statusBarHidden])
+    if([[(SpringBoard *)[UIApplication sharedApplication] _accessibilityFrontMostApplication] statusBarHidden] == NO && hideStatusBar)
     {
         CGRect newSSFrame;
         if (IS_RETINA)
@@ -243,6 +269,7 @@ static void saveScreenshot(UIImage *screenshot)
                 completionBlock:^(NSString *result)
                     {
                         [[UIPasteboard generalPasteboard] setString:result];
+                        showBanner();
                     }
                 failureBlock:^(NSURLResponse *response, NSError *error, NSInteger status){ }];
         }
@@ -287,6 +314,8 @@ static void saveScreenshot(UIImage *screenshot)
             completionBlock:^(NSString *result)
                 {
                     [[UIPasteboard generalPasteboard] setString:result];
+                    
+                    showBanner();
                 }
             failureBlock:^(NSURLResponse *response, NSError *error, NSInteger status){ }];
     }
