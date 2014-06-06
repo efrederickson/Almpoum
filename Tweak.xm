@@ -8,6 +8,10 @@
 #import <MobileCoreServices/MobileCoreServices.h> // For the UTI types constants
 #import "MLIMGURUploader.h"
 
+// For ScreenCrop
+@interface DragWindow : UIWindow
+@end
+
 @interface SBScreenShotter
 +(id)sharedInstance;
 -(void)saveScreenshot:(BOOL)screenshot;
@@ -182,7 +186,7 @@ static void saveScreenshot(UIImage *screenshot)
     id dragWindow = %c(DragWindow);
     if (dragWindow)
     {
-        id *window = [[DragWindow alloc] initWithFrame:[[[UIApplication sharedApplication] keyWindow] frame]];
+        DragWindow *window = [[%c(DragWindow) alloc] initWithFrame:[[[UIApplication sharedApplication] keyWindow] frame]];
         [window makeKeyAndVisible];
     }
 
@@ -321,8 +325,21 @@ static void saveScreenshot(UIImage *screenshot)
 }
 %end
 
+%hook SpringBoard
+-(void) takeIt
+{
+    // This is a hook for ScreenCrop
+    [(SBScreenShotter*)[%c(SBScreenShotter) sharedInstance] saveScreenshot:YES];
+}
+%end
+
 %ctor
 {
+    if ([[NSFileManager defaultManager] fileExistsAtPath:@"/Library/MobileSubstrate/DynamicLibraries/ScreenCrop.dylib"])
+        dlopen("/Library/MobileSubstrate/DynamicLibraries/ScreenCrop.dylib", RTLD_NOW | RTLD_GLOBAL);
+    if ([[NSFileManager defaultManager] fileExistsAtPath:@"/Library/MobileSubstrate/DynamicLibraries/ScreenPainter.dylib"])
+        dlopen("/Library/MobileSubstrate/DynamicLibraries/ScreenPainter.dylib", RTLD_NOW | RTLD_GLOBAL);
+
     %init;
 
     CFNotificationCenterRef r = CFNotificationCenterGetDarwinNotifyCenter();
