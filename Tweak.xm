@@ -24,6 +24,8 @@
 @end
 
 extern "C" UIImage *_UICreateScreenUIImageWithRotation(BOOL rotate);
+extern "C" UIImage* _UICreateScreenUIImage();
+
 #define kPhotoShutterSystemSound 0x454
 #define SETTINGS_FILE @"/var/mobile/Library/Preferences/com.efrederickson.almpoum.settings.plist"
 #define SETTINGS_EVENT "com.efrederickson.almpoum/reloadSettings"
@@ -176,6 +178,20 @@ static void saveScreenshot(UIImage *screenshot)
         screenshot = [UIImage imageWithCGImage:imageRef];
         CGImageRelease(imageRef);
     }
+    
+    id dragView = %c(DragView);
+    if (dragView)
+    {
+        UIWindow *window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+        window.windowLevel = UIWindowLevelStatusBar;
+        window.userInteractionEnabled = YES;
+        [window makeKeyAndVisible];
+
+        id drawView = [[%c(DragView) alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+
+        [window addSubview:drawView];
+        return;
+    }
 
 	if (screenshot) {
         if (saveMode == 1) // Prompt
@@ -279,6 +295,22 @@ static void saveScreenshot(UIImage *screenshot)
 	if (enabled)
         return uploadToPhotoStreams;
     return %orig;
+}
+%end
+
+// This is a hook for ScreenPainter
+// https://github.com/Sassoty/ScreenPainter/
+%hook DragView
+- (void)showEndAlert
+{
+    screenshot = _UICreateScreenUIImage();
+
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Almpoum" message:@"What would you like to happen to that Screenshot?" delegate:[%c(SBScreenShotter) sharedInstance] cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+    [alert addButtonWithTitle:@"Save to Photo Library"];
+    [alert addButtonWithTitle:@"Copy to the Clipboard"];
+    [alert addButtonWithTitle:@"Upload to Imgur"];
+    [alert addButtonWithTitle:@"Both"];
+    [alert show];
 }
 %end
 
