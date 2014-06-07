@@ -30,8 +30,8 @@
 				<string>Prompt Me</string>
 				<string>Save to Photo Library</string>
 				<string>Copy to the Clipboard</string>
-				<string>Upload to Imgur</string>
 				<string>Both</string>
+				<string>Upload to Imgur</string>
 			</array>
 			<key>validValues</key>
 			<array>
