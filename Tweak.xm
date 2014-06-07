@@ -167,7 +167,7 @@ void showBanner()
 	if (bulletinBannerController && bulletinRequest) {
 		BBBulletinRequest *request = [[bulletinRequest alloc] init];
 		request.title = @"Almpoum";
-		request.message = @"Image uploaded & link copied";
+		request.message = @"The screenshot has been uploaded & the link has been copied to your clipboard.";
 		request.sectionID = @"com.apple.Preferences";
 		[(SBBulletinBannerController *)[bulletinBannerController sharedInstance] observer:nil addBulletin:request forFeed:2];
 		return;
