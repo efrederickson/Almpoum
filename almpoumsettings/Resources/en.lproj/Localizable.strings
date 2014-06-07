@@ -23,11 +23,11 @@
     <key>ALBUMNAME_FOOTER</key>
     <string>Feeling a little groovy, or perhaps creative? Easily change the name of the album where all your screenshots will be saved.</string>
     <key>SAVETOCUSTOMALBUM</key>
-    <string>Save to Custom Album</string>
+    <string>Save to a Custom Album</string>
     <key>CUSTOM_ALBUM_NAME</key>
     <string>Album Name:</string>
     <key>OTHER_FOOTER</key>
-    <string>A few options that’ll allow you to customize the behavior when taking a screenshot. Please keep in mind that "Notify Apps of Screenshot" will only work on iOS 7.</string>
+    <string>A few options that’ll allow you to customize the behavior when taking a screenshot.</string>
     <key>SCREEN_FLASH</key>
     <string>Screen Flash</string>
     <key>DARKEN_FLASH</key>
@@ -39,6 +39,6 @@
     <key>UPLOAD_TO_PHOTO_STREAM</key>
     <string>Upload to Photo Stream</string>
     <key>HIDE_STATUS_BAR</key>
-    <string>Hide status bar</string>
+    <string>Hidden Status Bar</string>
 </dict>
 </plist>
