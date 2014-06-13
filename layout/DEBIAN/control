@@ -1,8 +1,8 @@
 Package: com.efrederickson.almpoum
 Name: Almpoum
-Depends: mobilesubstrate
+Depends: mobilesubstrate, libhide
 Conflicts: com.mologie.clipshot
-Version: 0.0.1
+Version: 1.1
 Architecture: iphoneos-arm
 Description: An awesome MobileSubstrate tweak!
 Maintainer: Elijah Frederickson
