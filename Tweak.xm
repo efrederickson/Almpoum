@@ -7,6 +7,13 @@
 #import <dlfcn.h>
 #import <MobileCoreServices/MobileCoreServices.h> // For the UTI types constants
 #import "MLIMGURUploader.h"
+#import <dlfcn.h>
+ 
+static void *libhide;
+static BOOL (*IsIconHiddenForDisplayID)(NSString *displayID); //a method to determine if the icon is already hidden or not
+static BOOL (*HideIconViaDisplayID)(NSString *displayID); //hides the icon for the display identifier
+static BOOL (*UnHideIconViaDisplayID)(NSString *displayID); //unhides the icon
+static NSString *appDisplayID = @"com.efrederickson.almpoum"; //our bundle identifier
 
 // For ScreenCrop
 @interface DragWindow : UIWindow
@@ -174,7 +181,7 @@ void showBanner()
 		BBBulletinRequest *request = [[bulletinRequest alloc] init];
 		request.title = @"Almpoum";
 		request.message = @"The screenshot has been uploaded & the link has been copied to your clipboard.";
-		request.sectionID = @"com.apple.Preferences";
+		request.sectionID = @"com.efrederickson.almpoum";
 		[(SBBulletinBannerController *)[bulletinBannerController sharedInstance] observer:nil addBulletin:request forFeed:2];
 		return;
 	}
@@ -372,6 +379,16 @@ void showBanner()
         dlopen("/Library/MobileSubstrate/DynamicLibraries/ScreenCrop.dylib", RTLD_NOW | RTLD_GLOBAL);
     if ([[NSFileManager defaultManager] fileExistsAtPath:@"/Library/MobileSubstrate/DynamicLibraries/ScreenPainter.dylib"])
         dlopen("/Library/MobileSubstrate/DynamicLibraries/ScreenPainter.dylib", RTLD_NOW | RTLD_GLOBAL);
+        
+    libhide = dlopen("/usr/lib/hide.dylib", RTLD_LAZY);
+    IsIconHiddenForDisplayID = reinterpret_cast<BOOL (*)(NSString *)>(dlsym(libhide,"IsIconHiddenDisplayId"));
+    HideIconViaDisplayID = reinterpret_cast<BOOL (*)(NSString *)>(dlsym(libhide,"HideIconViaDisplayId"));
+    UnHideIconViaDisplayID = reinterpret_cast<BOOL (*)(NSString *)>(dlsym(libhide,"UnHideIconViaDisplayId"));
+    
+    if (!IsIconHiddenForDisplayID(appDisplayID)) 
+    {
+       HideIconViaDisplayID(appDisplayID);
+    }
 
     %init;
 
