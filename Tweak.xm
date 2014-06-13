@@ -237,7 +237,6 @@ void showBanner()
             [alert addButtonWithTitle:@"Save to Photo Library"];
             [alert addButtonWithTitle:@"Copy to the Clipboard"];
             [alert addButtonWithTitle:@"Upload to Imgur"];
-            [alert addButtonWithTitle:@"Both"];
             [alert show];
         }
         if (saveMode == 2 || copyToPictures) // Photo library
@@ -349,7 +348,6 @@ void showBanner()
     [alert addButtonWithTitle:@"Save to Photo Library"];
     [alert addButtonWithTitle:@"Copy to the Clipboard"];
     [alert addButtonWithTitle:@"Upload to Imgur"];
-    [alert addButtonWithTitle:@"Both"];
     [alert show];
 }
 %end
