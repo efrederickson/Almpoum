@@ -15,7 +15,7 @@
     <key>SAVE_MODE_FOOTER</key>
     <string>Decides what you’d like Almpoum to do once you take a screenshot.</string>
     <key>ALWAYS_SAVE_FOOTER</key>
-    <string>These two settings allow you to always have a function done, regardless of the circumstance.</string>
+    <string>These three settings allow you to always have a function done, regardless of the circumstance.</string>
     <key>ALWAYS_COPY_CLIPBOARD</key>
     <string>Always Copy to Clipboard</string>
     <key>ALWAYS_SAVE_SS</key>
