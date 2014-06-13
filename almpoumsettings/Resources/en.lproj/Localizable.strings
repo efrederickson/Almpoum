@@ -40,5 +40,7 @@
     <string>Upload to Photo Stream</string>
     <key>HIDE_STATUS_BAR</key>
     <string>Hidden Status Bar</string>
+    <key>ALWAYS_SAVE_IMGUR</key>
+    <string>Always Save to Imgur</string>
 </dict>
 </plist>

@@ -76,6 +76,20 @@
 		</dict>
 		<dict>
 			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.efrederickson.almpoum.settings</string>
+			<key>key</key>
+			<string>alwaysSaveToImgur</string>
+			<key>label</key>
+			<string>ALWAYS_SAVE_IMGUR</string>
+			<key>PostNotification</key>
+			<string>com.efrederickson.almpoum/reloadSettings</string>
+		</dict>
+		<dict>
+			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>footerText</key>
 			<string>ALBUMNAME_FOOTER</string>

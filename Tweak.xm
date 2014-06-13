@@ -60,6 +60,7 @@ BOOL copyToPictures = NO;
 int saveMode = 1;
 BOOL uploadToPhotoStreams = YES;
 BOOL hideStatusBar = NO;
+BOOL alwaysSaveToImgur = NO;
 
 static UIImage *screenshot;
 
@@ -131,6 +132,11 @@ static void reloadSettings(CFNotificationCenterRef center,
         hideStatusBar = [[prefs objectForKey:@"hideStatusBar"] boolValue];
     else
         hideStatusBar = NO;
+
+    if ([prefs objectForKey:@"alwaysSaveToImgur"] != nil)
+        alwaysSaveToImgur = [[prefs objectForKey:@"alwaysSaveToImgur"] boolValue];
+    else
+        alwaysSaveToImgur = NO;
 }
 
 static void saveScreenshot(UIImage *screenshot)
@@ -259,7 +265,7 @@ void showBanner()
             if (!copyToPictures)
                 saveScreenshot(screenshot);
         }
-        if (saveMode == 5) // IMGUR
+        if (saveMode == 5 || alwaysSaveToImgur) // IMGUR
         {
             [MLIMGURUploader uploadPhoto:UIImagePNGRepresentation(screenshot)
                 title:@"Almpoum Screenshot"
