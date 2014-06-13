@@ -9,7 +9,7 @@
 	<key>CFBundleDisplayName</key>
 	<string>Almpoum</string>
 	<key>CFBundleExecutable</key>
-	<string>Almpoum</string>
+	<string>Almpoum.sh</string>
 	<key>CFBundleIcons</key>
 	<dict>
 		<key>CFBundlePrimaryIcon</key>
