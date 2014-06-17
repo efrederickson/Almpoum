@@ -1,6 +1,6 @@
 Package: com.efrederickson.almpoum
 Name: Almpoum
-Depends: mobilesubstrate, libhide
+Depends: mobilesubstrate, libhide, com.efrederickson.settingskit
 Conflicts: com.mologie.clipshot
 Version: 1.1
 Architecture: iphoneos-arm
