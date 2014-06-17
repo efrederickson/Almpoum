@@ -1,10 +1,14 @@
 ARCHS = armv7 armv7s arm64
-include theos/makefiles/common.mk
+TARGET = iPhone:clang:latest:latest
+CFLAGS = -fobjc-arc
+LDFLAGS = -F$(THEOS)/frameworks
+
+include $(THEOS)/makefiles/common.mk
 
 BUNDLE_NAME = AlmpoumSettings
 AlmpoumSettings_FILES = AlmpoumSettings.mm
 AlmpoumSettings_INSTALL_PATH = /Library/PreferenceBundles
-AlmpoumSettings_FRAMEWORKS = UIKit MessageUI Social QuartzCore CoreGraphics
+AlmpoumSettings_FRAMEWORKS = UIKit SettingsKit MessageUI Social QuartzCore CoreGraphics
 AlmpoumSettings_PRIVATE_FRAMEWORKS = Preferences
 
 include $(THEOS_MAKE_PATH)/bundle.mk

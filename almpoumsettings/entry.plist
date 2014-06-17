@@ -1,10 +1,10 @@
 {
-    entry = {
-	bundle = AlmpoumSettings;
-	cell = PSLinkCell;
-	detail = AlmpoumSettingsListController;
-	icon = AlmpoumSettings.png;
-	isController = 1;
-	label = Almpoum;
-    };
+	entry = {
+		bundle = AlmpoumSettings;
+		cell = PSLinkCell;
+		detail = "AlmpoumSettingsListController";
+		icon = "AlmpoumSettings.png";
+		isController = 1;
+		label = Almpoum;
+	};
 }

@@ -389,6 +389,8 @@ void showBanner()
     {
        HideIconViaDisplayID(appDisplayID);
     }
+    else
+        //UnHideIconViaDisplayID(appDisplayID);
 
     %init;
 
