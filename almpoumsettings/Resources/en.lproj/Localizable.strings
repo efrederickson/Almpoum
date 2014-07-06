@@ -17,9 +17,9 @@
     <key>ALWAYS_SAVE_FOOTER</key>
     <string>These three settings allow you to always have a function done, regardless of the circumstance.</string>
     <key>ALWAYS_COPY_CLIPBOARD</key>
-    <string>Always copy to Clipboard</string>
+    <string>Always Copy to Clipboard</string>
     <key>ALWAYS_SAVE_SS</key>
-    <string>Always save to Photos</string>
+    <string>Always Save to Photos</string>
     <key>ALBUMNAME_FOOTER</key>
     <string>Feeling a little groovy, or perhaps creative? Easily change the name of the album where all your screenshots will be saved.</string>
     <key>SAVETOCUSTOMALBUM</key>
@@ -41,6 +41,6 @@
     <key>HIDE_STATUS_BAR</key>
     <string>Hidden Status Bar</string>
     <key>ALWAYS_SAVE_IMGUR</key>
-    <string>Always upload to Imgur</string>
+    <string>Always Upload to Imgur</string>
 </dict>
 </plist>
