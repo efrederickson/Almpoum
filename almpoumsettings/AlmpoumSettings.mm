@@ -17,10 +17,6 @@
 -(UINavigationController*)navigationController;
 @end
 
-@interface UIImage (Private)
-+ (UIImage *)imageNamed:(NSString *)named inBundle:(NSBundle *)bundle;
-@end
-
 @interface AlmpoumSettingsListController: SKStandardController
 @end
 @interface ASettings2ListController : SKTintedListController<SKListControllerProtocol>
@@ -46,10 +42,15 @@
 -(NSString*) customTitle { return @""; }
 -(NSString*)postNotification { return @"com.efrederickson.almpoum/reloadSettings"; }
 -(NSString*)defaultsFileName { return @"com.efrederickson.almpoum.settings"; }
--(NSString*) emailAddress { return @"elijah.frederickson@gmail.com"; }
+-(NSArray*) emailAddresses { return @[@"elijah.frederickson@gmail.com", @"andrewaboshartworks@gmail.com"]; }
 -(NSString*) emailBody { return @""; }
 -(NSString*) emailSubject { return @"Almpoum"; }
 -(NSString*) enabledDescription { return @"Quickly enable or disable Almpoum."; }
+
+
+-(NSString*) settingsListControllerClassName { return @"ASettings2ListController"; }
+-(NSString*) makersListControllerClassName { return @"MakersListController"; }
+
 -(void) loadSettingsListController
 {
     ASettings2ListController *a = [[ASettings2ListController alloc] init];
