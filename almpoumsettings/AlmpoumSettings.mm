@@ -4,6 +4,7 @@
 #import <SettingsKit/SKStandardController.h>
 #import <SettingsKit/SKPersonCell.h>
 #import <SettingsKit/SKSharedHelper.h>
+#import <SettingsKit/SKListItemsController.h>
 
 @interface PSTableCell (Almpoum)
 @property (nonatomic, retain) UIView *backgroundView;
@@ -21,12 +22,15 @@
 @end
 @interface ASettings2ListController : SKTintedListController<SKListControllerProtocol>
 @end
-@interface MakersListController : SKTintedListController<SKListControllerProtocol>
+@interface AlmpoumMakersListController : SKTintedListController<SKListControllerProtocol>
 @end
 @interface ElijahPersonCell : SKPersonCell
 @end
 @interface AndrewPersonCell : SKPersonCell
 @end
+@interface AlmpoumListItemsController : SKListItemsController
+@end
+
 
 @implementation AlmpoumSettingsListController
 -(BOOL) showHeartImage { return YES; }
@@ -46,19 +50,19 @@
 -(NSString*) emailBody { return @""; }
 -(NSString*) emailSubject { return @"Almpoum"; }
 -(NSString*) enabledDescription { return @"Quickly enable or disable Almpoum."; }
-
+-(NSString*) footerText { return @"© 2014 Elijah Frederickson & Andrew Abosh"; }
 
 -(NSString*) settingsListControllerClassName { return @"ASettings2ListController"; }
--(NSString*) makersListControllerClassName { return @"MakersListController"; }
+-(NSString*) makersListControllerClassName { return @"AlmpoumMakersListController"; }
 
 -(void) loadSettingsListController
 {
     ASettings2ListController *a = [[ASettings2ListController alloc] init];
     [self pushController:a animate:YES];
 }
--(void) loadMakersListController
+-(void) loadAlmpoumMakersListController
 {
-    MakersListController *a = [[MakersListController alloc] init];
+    AlmpoumMakersListController *a = [[AlmpoumMakersListController alloc] init];
     [self pushController:a animate:YES];
 }
 @end
@@ -84,7 +88,7 @@
 @end
 
 
-@implementation MakersListController
+@implementation AlmpoumMakersListController
 -(UIColor*) navigationTintColor { return [UIColor colorWithRed:122/255.0f green:155/255.0f blue:153/255.0f alpha:1.0f]; }
 -(BOOL) showHeartImage { return NO; }
 -(NSString*) customTitle { return @"The Makers"; }
@@ -107,7 +111,7 @@
                  },
              @{ @"cell": @"PSGroupCell" },
              @{
-                 @"cell": @"PSButtonCell",
+                 @"cell": @"PSLinkCell",
                  @"label": @"Source Code",
                  @"action": @"openGithub",
                  @"icon": @"github.png"
@@ -129,4 +133,8 @@
 {
     [SKSharedHelper openTwitter:@"drewplex"];
 }
+@end
+
+@implementation AlmpoumListItemsController
+-(UIColor*) navigationTintColor { return [UIColor colorWithRed:122/255.0f green:155/255.0f blue:153/255.0f alpha:1.0f]; }
 @end

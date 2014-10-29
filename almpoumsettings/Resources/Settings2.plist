@@ -20,7 +20,7 @@
 			<key>defaults</key>
 			<string>com.efrederickson.almpoum.settings</string>
 			<key>detail</key>
-			<string>PSListItemsController</string>
+			<string>AlmpoumListItemsController</string>
 			<key>key</key>
 			<string>saveMode</string>
 			<key>label</key>

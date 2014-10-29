@@ -30,8 +30,6 @@
     completionBlock:(void(^)(NSString* result))completion
        failureBlock:(void(^)(NSURLResponse *response, NSError *error, NSInteger status))failureBlock
 {
-    NSAssert(imageData, @"Image data is required");
-    NSAssert(clientID, @"Client ID is required");
     
     NSString *urlString = @"https://api.imgur.com/3/upload.json";
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init] ;
