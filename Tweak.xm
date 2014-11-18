@@ -9,12 +9,6 @@
 #import "MLIMGURUploader.h"
 #import <dlfcn.h>
 #import <substrate.h>
- 
-static void *libhide;
-static BOOL (*IsIconHiddenForDisplayID)(NSString *displayID); //a method to determine if the icon is already hidden or not
-static BOOL (*HideIconViaDisplayID)(NSString *displayID); //hides the icon for the display identifier
-static BOOL (*UnHideIconViaDisplayID)(NSString *displayID); //unhides the icon
-static NSString *appDisplayID = @"com.efrederickson.almpoum"; //our bundle identifier
 
 @interface SBScreenFlash (iOS8)
 + (id)mainScreenFlasher;
@@ -77,6 +71,11 @@ BOOL hideStatusBar = NO;
 BOOL alwaysSaveToImgur = NO;
 
 static UIImage *screenshot;
+
+static dispatch_queue_t queue = dispatch_queue_create("openActivityViewControllerQueue", NULL);
+
+static UIWindow *window = nil;
+
 
 static void reloadSettings(CFNotificationCenterRef center,
                                     void *observer,
@@ -188,7 +187,7 @@ void showBanner()
 		BBBulletinRequest *request = [[bulletinRequest alloc] init];
 		request.title = @"Almpoum";
 		request.message = @"The screenshot has been uploaded & the link has been copied to your clipboard.";
-		request.sectionID = @"com.efrederickson.almpoum";
+		request.sectionID = @"com.apple.camera";
 		[(SBBulletinBannerController *)[bulletinBannerController sharedInstance] observer:nil addBulletin:request forFeed:2];
 		return;
 	}
@@ -212,15 +211,6 @@ void showBanner()
     else
         %orig;
 }
-- (void)flashWhiteWithCompletion:(id)arg1
-{
-	MSHookIvar<UIView*>(self, "_flashView").backgroundColor = UIColor.blackColor;
-    if (darkenCameraFlash && enabled)
-        %orig;
-    else
-        %orig;
-}
-
 %end
 
 %hook SBScreenShotter // <UIAlertViewDelegate>
@@ -232,8 +222,8 @@ void showBanner()
         return;
     }
 
-    //screenshot = _UICreateScreenUIImageWithRotation(TRUE);
-    screenshot = _UICreateScreenUIImage();
+    screenshot = _UICreateScreenUIImageWithRotation(TRUE);
+    //screenshot = _UICreateScreenUIImage();
     
     BOOL statusBarHidden = YES;
 
@@ -244,11 +234,7 @@ void showBanner()
 
     if(statusBarHidden == NO && hideStatusBar)
     {
-        CGRect newSSFrame;
-        if (IS_RETINA)
-            newSSFrame = CGRectMake(0, 20 * 2, screenshot.size.width * 2, (screenshot.size.height - 20) * 2);
-        else
-            newSSFrame = CGRectMake(0, 20, screenshot.size.width, screenshot.size.height - 20);
+        CGRect newSSFrame = CGRectMake(0, 20 * UIScreen.mainScreen.scale, screenshot.size.width * UIScreen.mainScreen.scale, (screenshot.size.height - 20) * UIScreen.mainScreen.scale);
             
         CGImageRef imageRef = CGImageCreateWithImageInRect(screenshot.CGImage, newSSFrame);
         screenshot = [UIImage imageWithCGImage:imageRef];
@@ -277,12 +263,14 @@ void showBanner()
     }
 
 	if (screenshot) {
+
         if (saveMode == 1) // Prompt
         { 
            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Almpoum" message:@"What would you like to happen to that Screenshot?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
            [alert addButtonWithTitle:@"Save to Photo Library"];
            [alert addButtonWithTitle:@"Copy to the Clipboard"];
            [alert addButtonWithTitle:@"Upload to Imgur"];
+           [alert addButtonWithTitle:@"Share..."];
            [alert show];
         }
         if (saveMode == 2 || copyToPictures) // Photo library
@@ -319,7 +307,27 @@ void showBanner()
                         showBanner();
                     }
                 }
-                failureBlock:nil];
+                failureBlock:^(NSURLResponse *a, NSError *b, NSInteger c){ }];
+        }
+        if (saveMode == 6)
+        {
+            if (window == nil) 
+                window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    		window.windowLevel = 666666;
+
+
+	        UIViewController *vc = [[UIViewController alloc] init];
+		    UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:@[screenshot] applicationActivities:nil];
+            [activityVC setCompletionHandler:^(NSString *activityType, BOOL completed) {
+                //[window resignKeyWindow];
+                window.rootViewController = nil;
+                window.hidden = YES;
+                window = nil;
+            }];
+
+	    	window.rootViewController = vc;
+	 		[window makeKeyAndVisible];
+            [vc presentViewController:activityVC animated:YES completion:nil];
         }
 
         if (notifyApps && IS_OS_7_OR_LATER)
@@ -372,15 +380,31 @@ void showBanner()
                         showBanner();
                     }
                 }
-            failureBlock:nil];
+            failureBlock:^(NSURLResponse *a, NSError *b, NSInteger c){ }];
     }
     else if (buttonIndex == 4) 
     {
-        // both
-        UIPasteboard *pb = [UIPasteboard generalPasteboard];
-        [pb setData:UIImagePNGRepresentation(screenshot) forPasteboardType:(__bridge NSString *)kUTTypePNG];
-            
-        saveScreenshot(screenshot);
+        // share
+        if (window == nil) 
+            window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+        window.windowLevel = 666666;
+        // send initialization of UIActivityViewController in background
+        //dispatch_async(queue, ^{
+            UIViewController *vc = [[UIViewController alloc] init];
+            UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:@[screenshot] applicationActivities:nil];
+            [activityVC setCompletionHandler:^(NSString *activityType, BOOL completed) {
+                //[window resignKeyWindow];
+                window.rootViewController = nil;
+                window.hidden = YES;
+                window = nil;
+            }];
+
+            window.rootViewController = vc;
+            [window makeKeyAndVisible];
+            //dispatch_sync(dispatch_get_main_queue(), ^{
+                [vc presentViewController:activityVC animated:YES completion:nil];
+            //});
+        //});
     }
 }
 %end
@@ -422,21 +446,6 @@ void showBanner()
         dlopen("/Library/MobileSubstrate/DynamicLibraries/ScreenCrop.dylib", RTLD_NOW | RTLD_GLOBAL);
     if ([[NSFileManager defaultManager] fileExistsAtPath:@"/Library/MobileSubstrate/DynamicLibraries/ScreenPainter.dylib"])
         dlopen("/Library/MobileSubstrate/DynamicLibraries/ScreenPainter.dylib", RTLD_NOW | RTLD_GLOBAL);
-        
-    if ([[NSFileManager defaultManager] fileExistsAtPath:@"/usr/lib/hide.dylib"])
-    {
-	    libhide = dlopen("/usr/lib/hide.dylib", RTLD_LAZY);
-	    IsIconHiddenForDisplayID = reinterpret_cast<BOOL (*)(NSString *)>(dlsym(libhide,"IsIconHiddenDisplayId"));
-	    HideIconViaDisplayID = reinterpret_cast<BOOL (*)(NSString *)>(dlsym(libhide,"HideIconViaDisplayId"));
-	    UnHideIconViaDisplayID = reinterpret_cast<BOOL (*)(NSString *)>(dlsym(libhide,"UnHideIconViaDisplayId"));
-	    
-	    if (!IsIconHiddenForDisplayID(appDisplayID)) 
-	    {
-	       HideIconViaDisplayID(appDisplayID);
-	    }
-	    else
-	        ;//UnHideIconViaDisplayID(appDisplayID);
-	}
 
     %init;
 

@@ -1,1 +1,0 @@
-[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs:root=Almpoum"]]

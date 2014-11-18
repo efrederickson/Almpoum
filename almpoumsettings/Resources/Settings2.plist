@@ -31,6 +31,7 @@
 				<string>Save to Photo Library</string>
 				<string>Copy to the Clipboard</string>
 				<string>Upload to Imgur</string>
+				<string>Share...</string>
 			</array>
 			<key>validValues</key>
 			<array>
@@ -38,6 +39,7 @@
 				<string>2</string>
 				<string>3</string>
 				<string>5</string>
+				<string>6</string>
 			</array>
 		</dict>
 		<dict>

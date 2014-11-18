@@ -46,7 +46,7 @@
 -(NSString*) customTitle { return @""; }
 -(NSString*)postNotification { return @"com.efrederickson.almpoum/reloadSettings"; }
 -(NSString*)defaultsFileName { return @"com.efrederickson.almpoum.settings"; }
--(NSArray*) emailAddresses { return @[@"elijah.frederickson@gmail.com", @"andrewaboshartworks@gmail.com"]; }
+-(NSArray*) emailAddresses { return @[@"elijahandandrew@gmail.com"]; }
 -(NSString*) emailBody { return @""; }
 -(NSString*) emailSubject { return @"Almpoum"; }
 -(NSString*) enabledDescription { return @"Quickly enable or disable Almpoum."; }
