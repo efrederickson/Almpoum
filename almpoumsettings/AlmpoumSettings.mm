@@ -92,6 +92,7 @@
 -(UIColor*) navigationTintColor { return [UIColor colorWithRed:122/255.0f green:155/255.0f blue:153/255.0f alpha:1.0f]; }
 -(BOOL) showHeartImage { return NO; }
 -(NSString*) customTitle { return @"The Makers"; }
+-(UIColor*) iconColor { return [UIColor colorWithRed:122/255.0f green:155/255.0f blue:153/255.0f alpha:1.0f]; }
 
 - (id)customSpecifiers {
     return @[
