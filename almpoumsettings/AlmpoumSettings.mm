@@ -43,7 +43,7 @@
 -(NSString*) headerSubText { return @"By Elijah and Andrew"; }
 -(UIColor*) headerColor { return [UIColor colorWithRed:74/255.0f green:74/255.0f blue:74/255.0f alpha:1.0f]; }
 -(UIColor*) iconColor { return [UIColor colorWithRed:122/255.0f green:155/255.0f blue:153/255.0f alpha:1.0f]; }
--(NSString*) customTitle { return @""; }
+-(NSString*) customTitle { return UIDevice.currentDevice.systemVersion.floatValue > 6.0 ? @"" : @"Almpoum"; }
 -(NSString*)postNotification { return @"com.efrederickson.almpoum/reloadSettings"; }
 -(NSString*)defaultsFileName { return @"com.efrederickson.almpoum.settings"; }
 -(NSArray*) emailAddresses { return @[@"elijahandandrew@gmail.com"]; }
@@ -54,23 +54,28 @@
 
 -(NSString*) settingsListControllerClassName { return @"ASettings2ListController"; }
 -(NSString*) makersListControllerClassName { return @"AlmpoumMakersListController"; }
-
--(void) loadSettingsListController
-{
-    ASettings2ListController *a = [[ASettings2ListController alloc] init];
-    [self pushController:a animate:YES];
-}
--(void) loadAlmpoumMakersListController
-{
-    AlmpoumMakersListController *a = [[AlmpoumMakersListController alloc] init];
-    [self pushController:a animate:YES];
-}
 @end
 
 @implementation ASettings2ListController
 -(UIColor*) navigationTintColor { return [UIColor colorWithRed:122/255.0f green:155/255.0f blue:153/255.0f alpha:1.0f]; }
 -(NSString*) plistName { return @"Settings2"; }
 -(BOOL) showHeartImage { return NO; }
+
+-(void)setPreferenceValue:(id)value specifier:(PSSpecifier*)specifier
+{
+    //[super setPreferenceValue:value specifier:specifier];
+    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.efrederickson.almpoum.settings.plist"];
+    [dict setObject:value forKey:[specifier propertyForKey:@"key"]];
+    [dict writeToFile:@"/var/mobile/Library/Preferences/com.efrederickson.almpoum.settings.plist" atomically:YES];
+    CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), CFSTR("com.efrederickson.almpoum/reloadSettings"), nil, nil, YES);
+}
+
+ -(id)readPreferenceValue:(PSSpecifier*)specifier
+ {
+    NSString *plistName = [NSString stringWithFormat:@"/User/Library/Preferences/%@.plist",[specifier propertyForKey:@"defaults"]];
+    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithContentsOfFile:plistName];
+    return dict[[specifier propertyForKey:@"key"]]; 
+ }
 @end
 
 @implementation  ElijahPersonCell
