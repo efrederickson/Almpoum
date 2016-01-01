@@ -11,6 +11,9 @@
 #error This class requires automatic reference counting (ARC).
 #endif
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+
 @interface ALAssetsLibrary (Private)
 
 /*! A block wraper to be executed after asset adding process done. (Private)
@@ -262,3 +265,5 @@
 }
 
 @end
+
+#pragma clang diagnostic pop

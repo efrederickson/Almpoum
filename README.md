@@ -17,6 +17,9 @@ An incredible screen shot replacement utility.
 
 The tweak can be downloaded *[here][3]*.
 
+
+Please note there is an extensive use of `pragma clang diagnostic ignored "-Wdeprecated-declarations"` which will likely result in a lot more work later (when they remove the deprecated methods).
+
 ----------
 
 

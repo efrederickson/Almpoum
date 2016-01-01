@@ -64,7 +64,7 @@
 -(void)setPreferenceValue:(id)value specifier:(PSSpecifier*)specifier
 {
     //[super setPreferenceValue:value specifier:specifier];
-    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.efrederickson.almpoum.settings.plist"];
+    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.efrederickson.almpoum.settings.plist"] ?: [NSMutableDictionary dictionary];
     [dict setObject:value forKey:[specifier propertyForKey:@"key"]];
     [dict writeToFile:@"/var/mobile/Library/Preferences/com.efrederickson.almpoum.settings.plist" atomically:YES];
     CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), CFSTR("com.efrederickson.almpoum/reloadSettings"), nil, nil, YES);
@@ -72,9 +72,8 @@
 
  -(id)readPreferenceValue:(PSSpecifier*)specifier
  {
-    NSString *plistName = [NSString stringWithFormat:@"/User/Library/Preferences/%@.plist",[specifier propertyForKey:@"defaults"]];
-    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithContentsOfFile:plistName];
-    return dict[[specifier propertyForKey:@"key"]]; 
+    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.efrederickson.almpoum.settings.plist"];
+    return dict[[specifier propertyForKey:@"key"]] ?: [specifier propertyForKey:@"default"]; 
  }
 @end
 

@@ -21,6 +21,9 @@
 
 #import "MLIMGURUploader.h"
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+
 @implementation MLIMGURUploader
 
 + (void)uploadPhoto:(NSData*)imageData
@@ -75,6 +78,10 @@
     [request setHTTPBody:requestBody];
     
     [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+        if (data == nil)
+        {
+            failureBlock(response, error, 0);
+        }
         NSDictionary *responseDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
         if ([responseDictionary valueForKeyPath:@"data.error"]) {
             if (failureBlock) {
@@ -95,3 +102,5 @@
 }
 
 @end
+
+#pragma clang diagnostic pop

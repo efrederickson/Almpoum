@@ -10,6 +10,9 @@
 #import <dlfcn.h>
 #import <substrate.h>
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations" 
+
 @interface SBScreenFlash (iOS8)
 + (id)mainScreenFlasher;
 - (void)flashColor:(id)arg1 withCompletion:(id)arg2;
@@ -44,6 +47,7 @@
 @interface SBBulletinBannerController : NSObject
 + (SBBulletinBannerController *)sharedInstance;
 - (void)observer:(id)observer addBulletin:(BBBulletinRequest *)bulletin forFeed:(int)feed;
+- (void)observer:(id)observer addBulletin:(BBBulletinRequest*) bulletin forFeed:(int)feed playLightsAndSirens:(BOOL)guess1 withReply:(id)guess2;
 @end
 
 extern "C" UIImage *_UICreateScreenUIImageWithRotation(BOOL rotate);
@@ -188,7 +192,10 @@ void showBanner()
 		request.title = @"Almpoum";
 		request.message = @"The screenshot has been uploaded & the link has been copied to your clipboard.";
 		request.sectionID = @"com.apple.camera";
-		[(SBBulletinBannerController *)[bulletinBannerController sharedInstance] observer:nil addBulletin:request forFeed:2];
+        if ([[bulletinBannerController sharedInstance] respondsToSelector:@selector(observer:addBulletin:forFeed:playLightsAndSirens:withReply:)]) 
+            [[bulletinBannerController sharedInstance] observer:nil addBulletin:request forFeed:2 playLightsAndSirens:YES withReply:nil];
+        else
+            [[bulletinBannerController sharedInstance] observer:nil addBulletin:request forFeed:2];
 		return;
 	}
 }
@@ -307,7 +314,10 @@ void showBanner()
                         showBanner();
                     }
                 }
-                failureBlock:^(NSURLResponse *a, NSError *b, NSInteger c){ }];
+                failureBlock:^(NSURLResponse *a, NSError *error, NSInteger c){ 
+                   UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Almpoum" message:[NSString stringWithFormat:@"An error occured while uploading your image: %@", error ? [error localizedDescription] : @"no details provided."] delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+                   [alert show];
+                }];
         }
         if (saveMode == 6)
         {
@@ -315,9 +325,14 @@ void showBanner()
                 window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     		window.windowLevel = 666666;
 
-
 	        UIViewController *vc = [[UIViewController alloc] init];
 		    UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:@[screenshot] applicationActivities:nil];
+            if ([activityVC respondsToSelector:@selector(popoverPresentationController)] && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+            {
+                activityVC.popoverPresentationController.sourceView = window;
+                // activity view size: {415,447}
+                activityVC.popoverPresentationController.sourceRect = CGRectMake((UIScreen.mainScreen.bounds.size.width - 415.0) / 2.0, UIScreen.mainScreen.bounds.size.height / 2.0, 1, 1);
+            }
             [activityVC setCompletionHandler:^(NSString *activityType, BOOL completed) {
                 //[window resignKeyWindow];
                 window.rootViewController = nil;
@@ -380,31 +395,37 @@ void showBanner()
                         showBanner();
                     }
                 }
-            failureBlock:^(NSURLResponse *a, NSError *b, NSInteger c){ }];
+            failureBlock:^(NSURLResponse *a, NSError *error, NSInteger c){ 
+                   UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Almpoum" message:[NSString stringWithFormat:@"An error occured while uploading your image: %@", error ? [error localizedDescription] : @"no details provided."] delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+                   [alert show];
+                }];
     }
     else if (buttonIndex == 4) 
     {
         // share
         if (window == nil) 
             window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-        window.windowLevel = 666666;
-        // send initialization of UIActivityViewController in background
-        //dispatch_async(queue, ^{
-            UIViewController *vc = [[UIViewController alloc] init];
-            UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:@[screenshot] applicationActivities:nil];
-            [activityVC setCompletionHandler:^(NSString *activityType, BOOL completed) {
-                //[window resignKeyWindow];
-                window.rootViewController = nil;
-                window.hidden = YES;
-                window = nil;
-            }];
+        window.windowLevel = 10;
 
-            window.rootViewController = vc;
-            [window makeKeyAndVisible];
-            //dispatch_sync(dispatch_get_main_queue(), ^{
-                [vc presentViewController:activityVC animated:YES completion:nil];
-            //});
-        //});
+        UIViewController *vc = [[UIViewController alloc] init];
+        UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:@[screenshot] applicationActivities:nil];
+        if ([activityVC respondsToSelector:@selector(popoverPresentationController)] && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            activityVC.popoverPresentationController.sourceView = window;
+            // activity view size: {415,447}
+            activityVC.popoverPresentationController.sourceRect = CGRectMake((UIScreen.mainScreen.bounds.size.width - 415.0) / 2.0, UIScreen.mainScreen.bounds.size.height / 2.0, 1, 1);
+        }
+        [activityVC setCompletionHandler:^(NSString *activityType, BOOL completed) {
+            //[window resignKeyWindow];
+            window.rootViewController = nil;
+            window.hidden = YES;
+            window = nil;
+        }];
+
+        window.rootViewController = vc;
+        [window makeKeyAndVisible];
+        [vc presentViewController:activityVC animated:YES completion:nil];
+
     }
 }
 %end
@@ -453,3 +474,5 @@ void showBanner()
     CFNotificationCenterAddObserver(r, NULL, &reloadSettings, CFSTR(SETTINGS_EVENT), NULL, 0);
     reloadSettings(nil, nil, nil, nil, nil);
 }
+
+#pragma clang diagnostic pop
