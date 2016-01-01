@@ -50,7 +50,7 @@
 -(NSString*) emailBody { return @""; }
 -(NSString*) emailSubject { return @"Almpoum"; }
 -(NSString*) enabledDescription { return @"Quickly enable or disable Almpoum."; }
--(NSString*) footerText { return @"© 2014 Elijah Frederickson & Andrew Abosh"; }
+-(NSString*) footerText { return @"© 2014-2016 Elijah Frederickson & Andrew Abosh"; }
 
 -(NSString*) settingsListControllerClassName { return @"ASettings2ListController"; }
 -(NSString*) makersListControllerClassName { return @"AlmpoumMakersListController"; }
